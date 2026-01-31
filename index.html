@@ -96,6 +96,7 @@
 
         /* PHONE INPUT SPECIFIC */
         #phone-auth-section { margin-top: 20px; }
+        /* Visible Captcha Centered */
         #recaptcha-container { margin: 15px auto; display: flex; justify-content: center; }
 
         /* FOOTER */
@@ -152,7 +153,9 @@
                 <h2 style="color: var(--accent-green); margin: 20px 0;">Phone Login 📱</h2>
                 <div id="phone-step-1">
                     <input type="tel" id="phone-number" placeholder="Enter Phone (e.g. 9999999999)">
+                    
                     <div id="recaptcha-container"></div>
+                    
                     <button class="btn" onclick="sendOTP()" id="get-otp-btn" style="width: 100%;">GET OTP</button>
                 </div>
 
@@ -222,7 +225,9 @@
         import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
-        // --- FIREBASE CONFIG ---
+        // ==========================================
+        // 🔴🔴 YOUR REAL FIREBASE CONFIG 🔴🔴
+        // ==========================================
         const firebaseConfig = {
             apiKey: "AIzaSyDHsq28W0PgjmDWJB9f1SOVwdRUvWT43oE",
             authDomain: "gen-z-pulse.firebaseapp.com",
@@ -260,14 +265,14 @@
             }
         });
 
-        // --- PHONE AUTH LOGIC (FIXED) ---
+        // --- PHONE AUTH LOGIC (FIXED: VISIBLE CAPTCHA) ---
         window.setupRecaptcha = () => {
-            if(document.getElementById('recaptcha-container').innerHTML !== "") return; // Already rendered
+            // Check if captcha already exists to avoid duplicate render
+            if (document.getElementById('recaptcha-container').innerHTML !== "") return;
 
             window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                'size': 'normal', // Changed to NORMAL (Visible) to fix sticking
+                'size': 'normal', // VISIBLE BOX (Fixes stuck loading)
                 'callback': (response) => {
-                    // reCAPTCHA solved
                     console.log("Captcha Solved");
                 },
                 'expired-callback': () => {
@@ -289,7 +294,7 @@
                 socialBtn.classList.add('hidden');
                 phoneSec.classList.remove('hidden');
                 
-                // Initialize captcha after a slight delay to ensure div is visible
+                // Initialize captcha after slight delay
                 setTimeout(() => { window.setupRecaptcha(); }, 500);
             } else {
                 phoneSec.classList.add('hidden');
@@ -301,13 +306,13 @@
         window.sendOTP = async () => {
             let phoneNumber = document.getElementById('phone-number').value.trim();
             
-            // 1. AUTO ADD +91 if missing
-            phoneNumber = phoneNumber.replace(/\s+/g, ''); // remove spaces
+            // 1. AUTO ADD +91 if missing & Remove spaces
+            phoneNumber = phoneNumber.replace(/\s+/g, '');
             if (!phoneNumber.startsWith('+')) {
                 phoneNumber = "+91" + phoneNumber; 
             }
 
-            // 2. CHECK DOMAIN
+            // 2. CHECK DOMAIN (Must allow local/github)
             if (window.location.protocol === 'file:') {
                 alert("Error: Phone Login works only on live GitHub link!");
                 return;
@@ -325,15 +330,18 @@
             signInWithPhoneNumber(auth, phoneNumber, appVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
-                    alert("OTP Sent to " + phoneNumber);
+                    alert("✅ OTP Sent to " + phoneNumber);
                     document.getElementById('phone-step-1').classList.add('hidden');
                     document.getElementById('phone-step-2').classList.remove('hidden');
                     btn.innerText = "GET OTP";
                 }).catch((error) => {
                     console.error(error);
                     btn.innerText = "Try Again";
-                    alert("SMS Error: " + error.message);
-                    // Reset captcha on error
+                    
+                    // Show Specific Error
+                    alert("❌ SMS Failed: " + error.message);
+                    
+                    // Reset captcha on error so user can try again
                     if(window.recaptchaVerifier) {
                         window.recaptchaVerifier.clear();
                         document.getElementById('recaptcha-container').innerHTML = "";
@@ -348,6 +356,7 @@
             
             window.confirmationResult.confirm(code).then((result) => {
                 alert("Phone Verified! Welcome.");
+                // onAuthStateChanged handles the redirect
             }).catch((error) => {
                 alert("Invalid OTP. Try again.");
             });
