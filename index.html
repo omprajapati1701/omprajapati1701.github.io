@@ -6,7 +6,7 @@
     <title>Gen-Z Pulse | Exclusive Community</title>
     <style>
         /* =========================================
-           1. CSS VARIABLES & RESET
+           CSS STYLES
            ========================================= */
         :root {
             --bg-color: #050505;
@@ -28,7 +28,6 @@
             line-height: 1.6;
         }
 
-        /* UTILITIES */
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         .hidden { display: none !important; }
 
@@ -94,9 +93,8 @@
         .google-btn { background: #fff; color: #000; border: none; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .google-btn:hover { background: #e0e0e0; color: #000; box-shadow: none; }
 
-        /* PHONE INPUT SPECIFIC */
         #phone-auth-section { margin-top: 20px; }
-        #recaptcha-container { margin: 10px auto; }
+        #recaptcha-container { margin: 15px auto; display: flex; justify-content: center; }
 
         /* FOOTER */
         .newsletter { text-align: center; padding: 100px 0; background: linear-gradient(to top, #111, var(--bg-color)); margin-top: 50px; }
@@ -142,7 +140,6 @@
                 <input type="password" id="auth-pass" placeholder="Enter Password">
                 <button class="btn" onclick="handleAuth()" id="auth-action-btn" style="width: 100%;">LOGIN</button>
                 <p class="switch-btn" onclick="switchAuthMode()" id="auth-switch-text">New here? Create Account</p>
-                
                 <p style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
                     <span class="switch-btn" style="color: var(--accent-green);" onclick="togglePhoneMode()">Use Phone Number Instead 📱</span>
                 </p>
@@ -151,7 +148,7 @@
             <div id="phone-section" class="hidden">
                 <h2 style="color: var(--accent-green); margin: 20px 0;">Phone Login 📱</h2>
                 <div id="phone-step-1">
-                    <input type="tel" id="phone-number" placeholder="+91 99999 99999 (Add Code)">
+                    <input type="tel" id="phone-number" placeholder="Enter Phone (e.g., 9876543210)">
                     <div id="recaptcha-container"></div>
                     <button class="btn" onclick="sendOTP()" id="get-otp-btn" style="width: 100%;">GET OTP</button>
                 </div>
@@ -165,7 +162,6 @@
                     <span class="switch-btn" onclick="togglePhoneMode()">Back to Email Login</span>
                 </p>
             </div>
-
         </div>
     </div>
 
@@ -241,7 +237,6 @@
 
         let isLoginMode = true;
 
-        // Monitor Auth State
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 document.getElementById('auth-view').classList.add('hidden');
@@ -260,16 +255,25 @@
             }
         });
 
-        // --- PHONE AUTH LOGIC ---
+        // --- ROBUST PHONE AUTH ---
         window.setupRecaptcha = () => {
-            if(!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                    'size': 'invisible',
-                    'callback': (response) => {
-                        // reCAPTCHA solved, allow signInWithPhoneNumber.
-                    }
-                });
+            // Check if element exists first
+            if (!document.getElementById('recaptcha-container')) return;
+            
+            // Clear existing if any
+            if(window.recaptchaVerifier) {
+                try {
+                    window.recaptchaVerifier.clear();
+                } catch(e) { console.log("Clear warning", e); }
+                window.recaptchaVerifier = null;
             }
+
+            window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                'size': 'invisible', // Invisible is smoother
+                'callback': (response) => {
+                    console.log("Recaptcha solved");
+                }
+            });
         };
 
         window.togglePhoneMode = () => {
@@ -281,6 +285,7 @@
                 emailSec.classList.add('hidden');
                 socialBtn.classList.add('hidden');
                 phoneSec.classList.remove('hidden');
+                setupRecaptcha(); // Init on toggle
             } else {
                 phoneSec.classList.add('hidden');
                 emailSec.classList.remove('hidden');
@@ -289,22 +294,45 @@
         };
 
         window.sendOTP = async () => {
-            const phoneNumber = document.getElementById('phone-number').value;
-            if(!phoneNumber) return alert("Enter Phone Number with code (+91..)");
+            let phoneNumber = document.getElementById('phone-number').value.trim();
             
-            document.getElementById('get-otp-btn').innerText = "Sending...";
+            // 1. Remove Spaces
+            phoneNumber = phoneNumber.replace(/\s+/g, '');
+
+            // 2. Add +91 if missing
+            if (!phoneNumber.startsWith('+')) {
+                phoneNumber = "+91" + phoneNumber; 
+            }
+
+            // 3. GitHub Check
+            if (window.location.protocol === 'file:') {
+                alert("Please upload to GitHub! Phone auth needs a live domain.");
+                return;
+            }
+            
+            const btn = document.getElementById('get-otp-btn');
+            btn.innerText = "Sending...";
+            btn.disabled = true;
+
+            // Re-setup to ensure fresh instance
             setupRecaptcha();
             const appVerifier = window.recaptchaVerifier;
 
             signInWithPhoneNumber(auth, phoneNumber, appVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
-                    alert("OTP Sent to " + phoneNumber);
+                    alert("OTP Sent to " + phoneNumber + "!");
                     document.getElementById('phone-step-1').classList.add('hidden');
                     document.getElementById('phone-step-2').classList.remove('hidden');
+                    btn.innerText = "GET OTP";
+                    btn.disabled = false;
                 }).catch((error) => {
-                    document.getElementById('get-otp-btn').innerText = "GET OTP";
-                    alert("SMS Error: " + error.message);
+                    console.error(error);
+                    btn.innerText = "Try Again";
+                    btn.disabled = false;
+                    alert("Error: " + error.message);
+                    // Force reset if error happens
+                    window.recaptchaVerifier.clear(); 
                 });
         };
 
@@ -314,13 +342,12 @@
             
             window.confirmationResult.confirm(code).then((result) => {
                 alert("Phone Verified! Welcome.");
-                // onAuthStateChanged handles the redirect
             }).catch((error) => {
                 alert("Invalid OTP. Try again.");
             });
         };
 
-        // --- EMAIL & GOOGLE AUTH ---
+        // --- EMAIL & GOOGLE ---
         window.switchAuthMode = () => {
             isLoginMode = !isLoginMode;
             if (isLoginMode) {
@@ -336,7 +363,7 @@
 
         window.googleLogin = async () => {
             try { await signInWithPopup(auth, googleProvider); } 
-            catch (error) { alert("Google Login works only on live website (GitHub). Error: " + error.message); }
+            catch (error) { alert("Error: " + error.message); }
         };
 
         window.handleAuth = async () => {
