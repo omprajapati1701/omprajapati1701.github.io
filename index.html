@@ -6,7 +6,7 @@
     <title>Gen-Z Pulse | Exclusive Community</title>
     <style>
         /* =========================================
-           1. CSS VARIABLES & RESET (UNCHANGED)
+           1. CSS VARIABLES & RESET
            ========================================= */
         :root {
             --bg-color: #050505;
@@ -56,7 +56,7 @@
         }
         nav { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-size: 1.8rem; font-weight: 900; color: var(--text-color); cursor: pointer; }
-        .nav-links { display: flex; gap: 20px; align-items: center; } /* Adjusted gap */
+        .nav-links { display: flex; gap: 20px; align-items: center; }
         .nav-links span { font-family: var(--font-mono); font-size: 0.9rem; cursor: pointer; transition: 0.3s; }
         .nav-links span:hover { color: var(--accent-purple); text-decoration: underline; }
         .active-filter { color: var(--accent-green) !important; text-decoration: underline; }
@@ -85,11 +85,19 @@
         .card-tag { background: var(--accent-purple); color: white; padding: 5px 10px; font-size: 0.7rem; text-transform: uppercase; display: inline-block; margin-bottom: 15px; }
 
         /* AUTH & ADMIN */
-        .auth-box { max-width: 400px; margin: 80px auto; background: #111; padding: 40px; border: 1px solid var(--accent-purple); text-align: center; }
+        .auth-box { max-width: 400px; margin: 60px auto; background: #111; padding: 40px; border: 1px solid var(--accent-purple); text-align: center; }
         .admin-panel { max-width: 600px; margin: 0 auto; background: #111; padding: 30px; border: 1px solid #333; }
         input, select, textarea { width: 100%; padding: 15px; background: #222; border: 1px solid #444; color: white; margin-bottom: 15px; font-family: var(--font-mono); }
         input:focus { outline: none; border-color: var(--accent-green); }
+        
         .switch-btn { margin-top: 15px; font-size: 0.8rem; color: #888; cursor: pointer; text-decoration: underline; }
+        
+        /* Google Button Style */
+        .google-btn {
+            background: #fff; color: #000; border: none; margin-bottom: 15px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .google-btn:hover { background: #e0e0e0; color: #000; box-shadow: none; }
 
         /* FOOTER */
         .newsletter { text-align: center; padding: 100px 0; background: linear-gradient(to top, #111, var(--bg-color)); margin-top: 50px; }
@@ -105,7 +113,6 @@
         <div class="container">
             <nav>
                 <div class="logo glitch" data-text="Gen-Z Pulse" onclick="loadBlogs('All')">Gen-Z Pulse</div>
-                
                 <div class="nav-links hidden" id="main-nav">
                     <span onclick="loadBlogs('All')" class="active-filter" id="nav-all">Home</span>
                     <span onclick="loadBlogs('Aesthetic')" id="nav-aesthetic">Aesthetic</span>
@@ -124,9 +131,18 @@
             <p style="color: #888; margin-bottom: 30px;">Login to access the vibe.</p>
             
             <h2 id="auth-title" style="color: var(--accent-purple); margin-bottom: 20px;">Login 🔒</h2>
+            
+            <button class="btn google-btn" onclick="googleLogin()" style="width: 100%;">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.715H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.448 2.816 1.256 3.966l2.708-2.256z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.159 6.656 3.58 9 3.58z"/></svg>
+                Continue with Google
+            </button>
+            
+            <p style="margin: 15px 0; color: #666;">-- OR --</p>
+
             <input type="email" id="auth-email" placeholder="Enter Email Address">
             <input type="password" id="auth-pass" placeholder="Enter Password">
             <button class="btn" onclick="handleAuth()" id="auth-action-btn" style="width: 100%;">ENTER</button>
+            
             <p class="switch-btn" onclick="switchAuthMode()" id="auth-switch-text">New here? Create Account</p>
         </div>
     </div>
@@ -199,7 +215,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // --- FIREBASE CONFIG ---
         const firebaseConfig = {
@@ -215,9 +231,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
 
         // ==========================================
-        // 🔒 ADMIN EMAIL CONFIGURATION
+        // 🔒 ADMIN EMAIL
         // ==========================================
         const ADMIN_EMAIL = "omprajapati1701@gmail.com"; 
         
@@ -236,6 +253,7 @@
                     loadBlogs('All');
                 }
 
+                // Check Admin
                 if(user.email === ADMIN_EMAIL) {
                     document.getElementById('nav-admin').classList.remove('hidden');
                 } else {
@@ -265,6 +283,17 @@
             }
         };
 
+        // GOOGLE LOGIN FUNCTION
+        window.googleLogin = async () => {
+            try {
+                await signInWithPopup(auth, googleProvider);
+                // Success is handled by onAuthStateChanged
+            } catch (error) {
+                alert("Google Login Error: " + error.message);
+            }
+        };
+
+        // EMAIL LOGIN/SIGNUP FUNCTION
         window.handleAuth = async () => {
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
@@ -273,13 +302,17 @@
 
             try {
                 if (isLoginMode) {
+                    // LOGIN MODE: Will FAIL if password is wrong
                     await signInWithEmailAndPassword(auth, email, pass);
                 } else {
+                    // SIGNUP MODE: Create new account
                     await createUserWithEmailAndPassword(auth, email, pass);
-                    alert("Account created! Welcome to the Vibe Check.");
+                    alert("Account created! Welcome.");
                 }
             } catch (error) {
                 alert("Error: " + error.message);
+                // Tip: If error says "user-not-found", it means email is wrong.
+                // If error says "wrong-password", password is wrong.
             }
         };
 
