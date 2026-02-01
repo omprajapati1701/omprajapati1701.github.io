@@ -37,17 +37,17 @@
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-main); overflow-x: hidden; line-height: 1.6; font-size: 16px; }
 
         /* CONTAINER SETUP */
-        .container { width: 100%; padding: 0 20px; margin: 0 auto; box-sizing: border-box; }
+        .container { width: 100%; padding: 0 15px; margin: 0 auto; box-sizing: border-box; }
         @media (min-width: 1024px) { .container { max-width: 1000px; } }
 
         .hidden { display: none !important; }
         
         /* LEGAL PAGES */
-        .legal-page { padding: 30px 20px; max-width: 800px; margin: 0 auto; }
+        .legal-page { padding: 30px 15px; max-width: 800px; margin: 0 auto; }
         .legal-page h2 { color: var(--accent-green); margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
         .legal-page p { margin-bottom: 15px; color: #ccc; font-size: 0.95rem; }
 
-        /* BUTTONS (MOBILE FIX APPLIED) */
+        /* BUTTONS (GLOBAL FIX) */
         .btn { 
             background: transparent; 
             border: 1px solid var(--accent-green); 
@@ -60,13 +60,9 @@
             transition: all 0.3s ease; 
             font-size: 0.9rem; 
             border-radius: 4px; 
-            width: 100%; /* Full width on mobile by default for safety */
-            max-width: 100%;
-            display: block;
-            margin-top: 10px;
+            display: inline-block;
+            text-align: center;
         }
-        @media (min-width: 768px) { .btn { width: auto; display: inline-block; } }
-        
         .btn:hover { background: var(--accent-green); color: var(--bg-color); box-shadow: 0 0 15px var(--accent-green); }
 
         /* ACTIONS ROW */
@@ -78,8 +74,8 @@
         .view-count { font-size: 0.8rem; color: #666; font-family: var(--font-mono); display: flex; align-items: center; gap: 5px; }
 
         /* SEARCH BAR */
-        .search-wrapper { margin-bottom: 40px; text-align: center; padding: 0 10px; }
-        #search-input { width: 100%; max-width: 600px; padding: 15px 25px; background: #111; border: 1px solid #333; color: white; border-radius: 50px; font-size: 1rem; transition: 0.3s; box-sizing: border-box; }
+        .search-wrapper { margin-bottom: 30px; text-align: center; padding: 0 10px; }
+        #search-input { width: 100%; max-width: 500px; padding: 12px 20px; background: #111; border: 1px solid #333; color: white; border-radius: 50px; font-size: 1rem; transition: 0.3s; box-sizing: border-box; }
         #search-input:focus { border-color: var(--accent-green); outline: none; box-shadow: 0 0 15px rgba(204, 255, 0, 0.2); }
 
         /* HEADER */
@@ -95,8 +91,8 @@
         .active-filter { color: var(--accent-green) !important; text-decoration: underline; }
 
         /* HERO */
-        .hero { min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 0; }
-        .hero h1 { font-size: 3rem; line-height: 1.1; text-transform: uppercase; margin-bottom: 20px; padding: 0 10px; }
+        .hero { min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 30px 0; }
+        .hero h1 { font-size: 2.5rem; line-height: 1.1; text-transform: uppercase; margin-bottom: 20px; padding: 0 10px; word-wrap: break-word; }
         
         /* GLITCH */
         .glitch { position: relative; }
@@ -107,7 +103,7 @@
         @keyframes glitch-anim2 { 0% { clip: rect(66px, 9999px, 41px, 0); } 100% { clip: rect(18px, 9999px, 87px, 0); } }
 
         /* MARQUEE */
-        .marquee { background: var(--accent-green); color: var(--bg-color); padding: 12px 0; overflow: hidden; white-space: nowrap; font-family: var(--font-mono); font-weight: bold; transform: rotate(-2deg); margin: 40px 0 60px 0; width: 105%; margin-left: -2.5%; }
+        .marquee { background: var(--accent-green); color: var(--bg-color); padding: 10px 0; overflow: hidden; white-space: nowrap; font-family: var(--font-mono); font-weight: bold; transform: rotate(-2deg); margin: 30px 0 50px 0; width: 105%; margin-left: -2.5%; }
         .marquee-content { display: inline-block; animation: scroll 20s linear infinite; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
@@ -138,19 +134,38 @@
         .footer-links span:hover { color: var(--accent-green); text-decoration: underline; }
         .seo-text { font-size: 0.9rem; color: #666; max-width: 800px; margin: 0 auto 40px auto; text-align: center; line-height: 1.8; padding: 0 15px; }
 
+        /* 🚨 MAGIC FIX: THIS PREVENTS CONTENT FROM CUTTING OFF */
+        #full-post-content { 
+            background: #111; 
+            padding: 20px 15px !important; 
+            border: 1px solid var(--accent-green); 
+            min-height: 50vh; 
+            border-radius: 8px; 
+            width: 100% !important; 
+            box-sizing: border-box; 
+            overflow-wrap: break-word; /* Breaks long text */
+            word-wrap: break-word;
+        }
+        
+        /* Forces ALL images and buttons inside blogs to fit screen */
+        #full-post-content * {
+            max-width: 100% !important;
+            height: auto !important;
+            box-sizing: border-box !important;
+        }
+
         /* =========================================
-           📱 SUPER MOBILE FIXES
+           📱 SUPER MOBILE RESPONSIVENESS
            ========================================= */
         @media (max-width: 768px) { 
-            /* Fix Title Size */
-            .hero h1 { font-size: 2.5rem; } 
+            .hero h1 { font-size: 2.2rem; } 
             
             /* Hamburger Menu */
             .hamburger { display: block; }
             .nav-links { 
                 display: none; 
                 flex-direction: column; 
-                position: fixed; /* Fixed to cover screen */
+                position: fixed; 
                 top: 0; left: 0; 
                 width: 100%; height: 100vh;
                 background: rgba(0,0,0,0.95); 
@@ -166,13 +181,9 @@
             .grid { grid-template-columns: 1fr; }
             .card { margin-bottom: 10px; padding: 15px; }
             
-            /* Fix Content Padding - THIS FIXES THE CUTTING */
-            #full-post-content { padding: 20px 15px !important; width: 100% !important; box-sizing: border-box; overflow-x: hidden; }
-            #full-post-content img, #full-post-content iframe { max-width: 100% !important; height: auto; display: block; margin: 10px 0; }
-            
             /* Fix Buttons Overflow */
-            .action-row { flex-direction: column; width: 100%; }
-            .icon-btn, .like-btn { width: 100%; justify-content: center; margin-top: 5px; }
+            .action-row { flex-direction: row; flex-wrap: wrap; width: 100%; gap: 10px; }
+            .icon-btn, .like-btn { flex: 1; justify-content: center; margin-top: 5px; font-size: 0.8rem; padding: 10px 5px; }
             
             /* Marquee Fix */
             .marquee { width: 100%; margin-left: 0; transform: none; margin: 30px 0; }
@@ -292,7 +303,7 @@
 
     <div id="read-view" class="container blog-section hidden" style="padding-top: 40px;">
         <button class="btn" onclick="goHome()" style="margin-bottom: 20px; width: auto;">&larr; Back to Home</button>
-        <div id="full-post-content" style="background: #111; padding: 40px; border: 1px solid var(--accent-green); min-height: 50vh; border-radius: 8px;"></div>
+        <div id="full-post-content"></div>
     </div>
 
     <div id="admin-view" class="container blog-section hidden" style="padding-top: 40px;">
@@ -405,7 +416,7 @@
                                 <span class="view-count">👁️ ${views}</span>
                             </div>
                         </div>
-                        <button class="btn" onclick='openPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
+                        <button class="btn" style="width:100%; margin-top:10px;" onclick='openPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
                         <div class="action-row">
                              <button class="icon-btn like-btn ${isLikedLocal}" id="like-btn-${pid}" onclick="toggleLike('${pid}')">
                                 ❤️ <span id="like-count-${pid}">${likes}</span>
