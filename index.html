@@ -11,7 +11,7 @@
     <meta name="author" content="Om Prajapati">
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2868302084432283"
-     crossorigin="anonymous"></script>
+      crossorigin="anonymous"></script>
     <style>
         /* =========================================
            1. CSS VARIABLES & RESET
@@ -55,6 +55,47 @@
         }
         .btn:hover { background: var(--accent-green); color: var(--bg-color); box-shadow: 0 0 15px var(--accent-green); }
 
+        /* ACTIONS (LIKE, SHARE, VIEW) */
+        .action-row { display: flex; gap: 10px; margin-top: 15px; align-items: center; justify-content: space-between; }
+        
+        .icon-btn {
+            background: transparent;
+            border: 1px solid #333;
+            color: #888;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            display: flex; align-items: center; gap: 6px;
+            transition: 0.3s;
+            font-size: 0.8rem;
+            border-radius: 5px;
+        }
+        
+        /* Like Button */
+        .like-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
+        .like-btn.liked-active { background: var(--accent-purple); color: white; border-color: var(--accent-purple); }
+
+        /* WhatsApp Button */
+        .share-btn:hover { border-color: #25D366; color: #25D366; }
+
+        /* View Counter (No click) */
+        .view-count { font-size: 0.8rem; color: #666; font-family: var(--font-mono); display: flex; align-items: center; gap: 5px; }
+
+        /* SEARCH BAR */
+        .search-wrapper { margin-bottom: 40px; text-align: center; }
+        #search-input {
+            width: 100%; max-width: 500px;
+            padding: 15px 20px;
+            background: #111;
+            border: 1px solid #333;
+            color: white;
+            border-radius: 50px;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+        #search-input:focus { border-color: var(--accent-green); outline: none; box-shadow: 0 0 15px rgba(204, 255, 0, 0.2); }
+
         /* HEADER */
         header {
             padding: 20px 0;
@@ -88,7 +129,7 @@
         .blog-section { padding: 50px 0; min-height: 60vh; }
         .section-title { font-size: 2.5rem; margin-bottom: 40px; border-left: 5px solid var(--accent-purple); padding-left: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; transition: 0.3s; position: relative; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; transition: 0.3s; position: relative; display: flex; flex-direction: column; justify-content: space-between; }
         .card:hover { transform: translateY(-5px); border-color: var(--accent-green); }
         
         /* ADMIN CONTROLS IN CARD */
@@ -207,6 +248,11 @@
 
         <section class="container blog-section" id="blog-anchor">
             <h2 class="section-title" id="grid-title">Trending Now</h2>
+            
+            <div class="search-wrapper">
+                <input type="text" id="search-input" placeholder="🔍 Search vibes, gadgets, or gossip..." onkeyup="filterBlogs()">
+            </div>
+
             <div class="grid" id="blog-grid"><p style="color: #666;">Loading Vibes...</p></div>
         </section>
     </div>
@@ -247,7 +293,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp, doc, updateDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // 🔥 FIREBASE CONFIG
@@ -268,7 +314,7 @@
         const ADMIN_EMAIL = "omprajapati1701@gmail.com"; 
 
         let isLoginMode = true;
-        let editingPostId = null; // Track if we are editing
+        let editingPostId = null;
 
         // 🟢 LOAD BLOGS FUNCTION (Public)
         window.loadBlogs = async (filterCategory = 'All') => {
@@ -289,21 +335,50 @@
 
                 querySnapshot.forEach((docSnapshot) => {
                     const post = docSnapshot.data();
-                    const pid = docSnapshot.id; // Get Document ID
+                    const pid = docSnapshot.id; 
+                    const likes = post.likes || 0;
+                    const views = post.views || 0; // NEW: Get View Count
                     
                     if (filterCategory !== 'All' && post.category !== filterCategory) return;
                     
                     const card = document.createElement('article');
                     card.className = 'card';
+                    // We add data-title for the Search function
+                    card.setAttribute('data-title', post.title.toLowerCase());
+
+                    const isLikedLocal = localStorage.getItem('liked_' + pid) ? 'liked-active' : '';
                     
-                    // Basic Card HTML
+                    // WhatsApp Share Text
+                    const shareText = `Check out this vibe: ${post.title} on Gen-Z Pulse! https://omprajapati1701.github.io`;
+                    const whatsappLink = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
+
                     let htmlContent = `
-                        <h3 style="margin-bottom:10px;">${post.title}</h3>
-                        <div style="background:var(--glass); padding:5px 10px; display:inline-block; font-size:0.7rem; margin-bottom:10px; color:var(--accent-purple); border:1px solid var(--accent-purple);">${post.category}</div>
-                        <button class="btn" style="width:100%; margin-top:10px;" onclick='openPost(${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:start;">
+                                <h3 style="margin-bottom:10px;">${post.title}</h3>
+                            </div>
+                            
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                                <span style="background:var(--glass); padding:4px 8px; font-size:0.7rem; color:var(--accent-purple); border:1px solid var(--accent-purple);">${post.category}</span>
+                                <span class="view-count">👁️ ${views}</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn" style="width:100%; margin-top:10px;" onclick='openPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
+
+                        <div class="action-row">
+                             <button class="icon-btn like-btn ${isLikedLocal}" id="like-btn-${pid}" onclick="toggleLike('${pid}')">
+                                ❤️ <span id="like-count-${pid}">${likes}</span>
+                             </button>
+
+                             <a href="${whatsappLink}" target="_blank" style="text-decoration:none;">
+                                <button class="icon-btn share-btn">
+                                    📲 Share
+                                </button>
+                             </a>
+                        </div>
                     `;
 
-                    // Add EDIT/DELETE buttons ONLY for Admin
                     if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
                         htmlContent += `
                             <div class="admin-controls">
@@ -322,44 +397,88 @@
             }
         };
 
-        // --- AUTH STATE UI ---
+        // 🟢 NEW: SEARCH FILTER FUNCTION
+        window.filterBlogs = () => {
+            const input = document.getElementById('search-input');
+            const filter = input.value.toLowerCase();
+            const grid = document.getElementById('blog-grid');
+            const cards = grid.getElementsByClassName('card');
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].getAttribute('data-title');
+                if (title.indexOf(filter) > -1) {
+                    cards[i].classList.remove('hidden');
+                } else {
+                    cards[i].classList.add('hidden');
+                }
+            }
+        };
+
+        // 🟢 HANDLE LIKES
+        window.toggleLike = async (pid) => {
+            const likeKey = 'liked_' + pid;
+            const isLiked = localStorage.getItem(likeKey);
+            const countSpan = document.getElementById(`like-count-${pid}`);
+            const btn = document.getElementById(`like-btn-${pid}`);
+            
+            let currentCount = parseInt(countSpan.innerText);
+            const postRef = doc(db, "posts", pid);
+
+            if (isLiked) {
+                localStorage.removeItem(likeKey);
+                btn.classList.remove('liked-active');
+                countSpan.innerText = currentCount - 1;
+                await updateDoc(postRef, { likes: increment(-1) });
+            } else {
+                localStorage.setItem(likeKey, "true");
+                btn.classList.add('liked-active');
+                countSpan.innerText = currentCount + 1;
+                await updateDoc(postRef, { likes: increment(1) });
+            }
+        };
+
+        // 🟢 OPEN POST & INCREMENT VIEW COUNT
+        window.openPost = async (pid, post) => {
+            showSection('read');
+            document.getElementById('full-post-content').innerHTML = `<h1>${post.title}</h1><hr><div style="font-size:1.1rem; line-height:1.8;">${post.content.replace(/\n/g, "<br>")}</div>`;
+            window.scrollTo(0,0);
+            
+            // Increment View in Background
+            try {
+                const postRef = doc(db, "posts", pid);
+                await updateDoc(postRef, { views: increment(1) });
+            } catch(e) { console.log("View update failed", e); }
+        };
+
+        // --- AUTH & OTHER LOGIC ---
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('nav-login');
             const logoutBtn = document.getElementById('nav-logout');
             const adminBtn = document.getElementById('nav-admin');
 
             if (user) {
-                // User Logged In
                 loginBtn.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
                 document.getElementById('auth-view').classList.add('hidden'); 
-                
                 if(user.email === ADMIN_EMAIL) {
                     adminBtn.classList.remove('hidden');
-                    loadBlogs('All'); // Reload to show admin buttons
+                    loadBlogs('All'); 
                 }
             } else {
-                // User Logged Out
                 loginBtn.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
                 adminBtn.classList.add('hidden');
-                loadBlogs('All'); // Reload to hide admin buttons
+                loadBlogs('All'); 
             }
         });
 
-        // --- NEW: EDIT & DELETE FUNCTIONS ---
         window.editPost = (id, post) => {
-            editingPostId = id; // Set ID
-            
-            // Fill Form
+            editingPostId = id; 
             document.getElementById('post-title').value = post.title;
             document.getElementById('post-category').value = post.category;
             document.getElementById('post-content').value = post.content;
-            
-            // Change UI Text
             document.getElementById('form-title').innerText = "Update Vibe ✏️";
             document.getElementById('upload-btn').innerText = "UPDATE";
-            
             showSection('admin');
         };
 
@@ -375,13 +494,9 @@
             }
         };
 
-        // --- PHONE AUTH LOGIC ---
         window.setupRecaptcha = () => {
             if(!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
-                    'size': 'invisible',
-                    'callback': (response) => {}
-                });
+                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible', 'callback': (response) => {} });
             }
         };
 
@@ -389,26 +504,19 @@
             const emailSec = document.getElementById('email-section');
             const phoneSec = document.getElementById('phone-section');
             const socialBtn = document.getElementById('social-login');
-            
             if(phoneSec.classList.contains('hidden')) {
-                emailSec.classList.add('hidden');
-                socialBtn.classList.add('hidden');
-                phoneSec.classList.remove('hidden');
+                emailSec.classList.add('hidden'); socialBtn.classList.add('hidden'); phoneSec.classList.remove('hidden');
             } else {
-                phoneSec.classList.add('hidden');
-                emailSec.classList.remove('hidden');
-                socialBtn.classList.remove('hidden');
+                phoneSec.classList.add('hidden'); emailSec.classList.remove('hidden'); socialBtn.classList.remove('hidden');
             }
         };
 
         window.sendOTP = async () => {
             const phoneNumber = document.getElementById('phone-number').value;
             if(!phoneNumber) return alert("Enter Phone Number with code (+91..)");
-            
             document.getElementById('get-otp-btn').innerText = "Sending...";
             setupRecaptcha();
             const appVerifier = window.recaptchaVerifier;
-
             signInWithPhoneNumber(auth, phoneNumber, appVerifier)
                 .then((confirmationResult) => {
                     window.confirmationResult = confirmationResult;
@@ -424,16 +532,12 @@
         window.verifyOTP = async () => {
             const code = document.getElementById('otp-code').value;
             if(!code) return alert("Enter OTP");
-            
             window.confirmationResult.confirm(code).then((result) => {
                 alert("Phone Verified! Welcome.");
                 showSection('home');
-            }).catch((error) => {
-                alert("Invalid OTP. Try again.");
-            });
+            }).catch((error) => { alert("Invalid OTP. Try again."); });
         };
 
-        // --- EMAIL & GOOGLE AUTH ---
         window.switchAuthMode = () => {
             isLoginMode = !isLoginMode;
             if (isLoginMode) {
@@ -456,13 +560,9 @@
             const email = document.getElementById('auth-email').value;
             const pass = document.getElementById('auth-pass').value;
             if (!email || !pass) return alert("Enter details.");
-
             try {
                 if (isLoginMode) await signInWithEmailAndPassword(auth, email, pass);
-                else {
-                    await createUserWithEmailAndPassword(auth, email, pass);
-                    alert("Account Created!");
-                }
+                else { await createUserWithEmailAndPassword(auth, email, pass); alert("Account Created!"); }
                 showSection('home');
             } catch (error) { alert("Error: " + error.message); }
         };
@@ -470,7 +570,6 @@
         window.logoutUser = () => { signOut(auth); alert("Logged out."); window.location.reload(); };
         
         window.showSection = (id) => {
-            // Reset Admin Form if leaving admin section
             if(id !== 'admin') {
                 editingPostId = null;
                 document.getElementById('form-title').innerText = "Create New Vibe ✨";
@@ -478,7 +577,6 @@
                 document.getElementById('post-title').value = "";
                 document.getElementById('post-content').value = "";
             }
-
             ['home', 'read', 'auth', 'admin'].forEach(sid => {
                 const el = document.getElementById(sid + '-view');
                 if(el) el.classList.add('hidden');
@@ -487,38 +585,25 @@
         };
         window.goHome = () => showSection('home');
 
-        window.openPost = (post) => {
-            showSection('read');
-            document.getElementById('full-post-content').innerHTML = `<h1>${post.title}</h1><hr><div style="font-size:1.1rem; line-height:1.8;">${post.content.replace(/\n/g, "<br>")}</div>`;
-            window.scrollTo(0,0);
-        };
-
-        // 🟢 HANDLE POST (CREATE OR UPDATE)
         window.handlePostSubmit = async () => {
             const user = auth.currentUser;
             if (!user || user.email !== ADMIN_EMAIL) return alert("Admin only!");
-            
             const title = document.getElementById('post-title').value;
             const category = document.getElementById('post-category').value;
             const content = document.getElementById('post-content').value;
-            
             try {
                 if (editingPostId) {
-                    // UPDATE EXISTING POST
-                    await updateDoc(doc(db, "posts", editingPostId), {
-                        title, category, content, 
-                        // Note: We don't update timestamp so it stays in original order
-                    });
+                    await updateDoc(doc(db, "posts", editingPostId), { title, category, content });
                     alert("Updated Successfully! ✅");
                 } else {
-                    // CREATE NEW POST
                     await addDoc(collection(db, "posts"), { 
                         title, category, content, 
-                        timestamp: serverTimestamp() 
+                        timestamp: serverTimestamp(),
+                        likes: 0,
+                        views: 0 // Initialize Views
                     });
                     alert("Published Successfully! 🚀");
                 }
-                
                 goHome(); 
                 loadBlogs('All');
             } catch(e) { alert("Error: " + e.message); }
@@ -530,9 +615,7 @@
         else if(h<18) g.innerText="It's Giving Afternoon ☕";
         else g.innerText="Go to Sleep Bestie 💤";
 
-        // Initial Load
         loadBlogs('All');
     </script>
 </body>
 </html>
-
