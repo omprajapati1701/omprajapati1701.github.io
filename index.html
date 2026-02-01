@@ -88,9 +88,14 @@
         .blog-section { padding: 50px 0; min-height: 60vh; }
         .section-title { font-size: 2.5rem; margin-bottom: 40px; border-left: 5px solid var(--accent-purple); padding-left: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; transition: 0.3s; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; transition: 0.3s; position: relative; }
         .card:hover { transform: translateY(-5px); border-color: var(--accent-green); }
         
+        /* ADMIN CONTROLS IN CARD */
+        .admin-controls { margin-top: 15px; display: flex; gap: 10px; border-top: 1px solid #333; padding-top: 10px; }
+        .btn-edit { background: #333; color: white; border: none; padding: 5px 10px; cursor: pointer; font-size: 0.8rem; }
+        .btn-delete { background: #500; color: white; border: none; padding: 5px 10px; cursor: pointer; font-size: 0.8rem; }
+
         /* AUTH & ADMIN */
         .auth-box { max-width: 400px; margin: 60px auto; background: #111; padding: 40px; border: 1px solid var(--accent-purple); text-align: center; }
         .admin-panel { max-width: 600px; margin: 0 auto; background: #111; padding: 30px; border: 1px solid #333; }
@@ -213,7 +218,7 @@
 
     <div id="admin-view" class="container blog-section hidden" style="padding-top: 40px;">
         <div class="admin-panel">
-            <h2 style="color: var(--accent-green); margin-bottom: 20px;">Create New Vibe ✨</h2>
+            <h2 id="form-title" style="color: var(--accent-green); margin-bottom: 20px;">Create New Vibe ✨</h2>
             <input type="text" id="post-title" placeholder="Blog Title">
             <select id="post-category">
                 <option value="Aesthetic">Aesthetic</option>
@@ -222,7 +227,9 @@
                 <option value="Tech/AI">Tech/AI</option>
             </select>
             <textarea id="post-content" rows="12" placeholder="Write content (Paste HTML here)..."></textarea>
-            <button class="btn" id="upload-btn" onclick="uploadPost()" style="width: 100%;">PUBLISH</button>
+            
+            <button class="btn" id="upload-btn" onclick="handlePostSubmit()" style="width: 100%;">PUBLISH</button>
+            
             <button class="btn" onclick="goHome()" style="width: 100%; margin-top:10px; border-color:#666; color:#666;">Cancel</button>
         </div>
     </div>
@@ -240,7 +247,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, orderBy, query, serverTimestamp, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // 🔥 FIREBASE CONFIG
@@ -261,6 +268,7 @@
         const ADMIN_EMAIL = "omprajapati1701@gmail.com"; 
 
         let isLoginMode = true;
+        let editingPostId = null; // Track if we are editing
 
         // 🟢 LOAD BLOGS FUNCTION (Public)
         window.loadBlogs = async (filterCategory = 'All') => {
@@ -279,17 +287,33 @@
                     return;
                 }
 
-                querySnapshot.forEach((doc) => {
-                    const post = doc.data();
+                querySnapshot.forEach((docSnapshot) => {
+                    const post = docSnapshot.data();
+                    const pid = docSnapshot.id; // Get Document ID
+                    
                     if (filterCategory !== 'All' && post.category !== filterCategory) return;
                     
                     const card = document.createElement('article');
                     card.className = 'card';
-                    card.innerHTML = `
+                    
+                    // Basic Card HTML
+                    let htmlContent = `
                         <h3 style="margin-bottom:10px;">${post.title}</h3>
                         <div style="background:var(--glass); padding:5px 10px; display:inline-block; font-size:0.7rem; margin-bottom:10px; color:var(--accent-purple); border:1px solid var(--accent-purple);">${post.category}</div>
                         <button class="btn" style="width:100%; margin-top:10px;" onclick='openPost(${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
                     `;
+
+                    // Add EDIT/DELETE buttons ONLY for Admin
+                    if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
+                        htmlContent += `
+                            <div class="admin-controls">
+                                <button class="btn-edit" onclick='editPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>EDIT</button>
+                                <button class="btn-delete" onclick='deletePost("${pid}")'>DELETE</button>
+                            </div>
+                        `;
+                    }
+
+                    card.innerHTML = htmlContent;
                     grid.appendChild(card);
                 });
             } catch (e) { 
@@ -308,20 +332,50 @@
                 // User Logged In
                 loginBtn.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
-                document.getElementById('auth-view').classList.add('hidden'); // Hide login form if visible
+                document.getElementById('auth-view').classList.add('hidden'); 
                 
-                if(user.email === ADMIN_EMAIL) adminBtn.classList.remove('hidden');
-                
-                // ❌ maine yahan se loadBlogs hata diya hai (Problem Fixed)
+                if(user.email === ADMIN_EMAIL) {
+                    adminBtn.classList.remove('hidden');
+                    loadBlogs('All'); // Reload to show admin buttons
+                }
             } else {
                 // User Logged Out
                 loginBtn.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
                 adminBtn.classList.add('hidden');
+                loadBlogs('All'); // Reload to hide admin buttons
             }
         });
 
-        // --- PHONE AUTH LOGIC (KEPT AS REQUESTED) ---
+        // --- NEW: EDIT & DELETE FUNCTIONS ---
+        window.editPost = (id, post) => {
+            editingPostId = id; // Set ID
+            
+            // Fill Form
+            document.getElementById('post-title').value = post.title;
+            document.getElementById('post-category').value = post.category;
+            document.getElementById('post-content').value = post.content;
+            
+            // Change UI Text
+            document.getElementById('form-title').innerText = "Update Vibe ✏️";
+            document.getElementById('upload-btn').innerText = "UPDATE";
+            
+            showSection('admin');
+        };
+
+        window.deletePost = async (id) => {
+            if(confirm("Are you sure you want to delete this vibe? 🗑️")) {
+                try {
+                    await deleteDoc(doc(db, "posts", id));
+                    alert("Deleted Successfully!");
+                    loadBlogs('All');
+                } catch(e) {
+                    alert("Error deleting: " + e.message);
+                }
+            }
+        };
+
+        // --- PHONE AUTH LOGIC ---
         window.setupRecaptcha = () => {
             if(!window.recaptchaVerifier) {
                 window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
@@ -416,6 +470,15 @@
         window.logoutUser = () => { signOut(auth); alert("Logged out."); window.location.reload(); };
         
         window.showSection = (id) => {
+            // Reset Admin Form if leaving admin section
+            if(id !== 'admin') {
+                editingPostId = null;
+                document.getElementById('form-title').innerText = "Create New Vibe ✨";
+                document.getElementById('upload-btn').innerText = "PUBLISH";
+                document.getElementById('post-title').value = "";
+                document.getElementById('post-content').value = "";
+            }
+
             ['home', 'read', 'auth', 'admin'].forEach(sid => {
                 const el = document.getElementById(sid + '-view');
                 if(el) el.classList.add('hidden');
@@ -430,16 +493,32 @@
             window.scrollTo(0,0);
         };
 
-        window.uploadPost = async () => {
+        // 🟢 HANDLE POST (CREATE OR UPDATE)
+        window.handlePostSubmit = async () => {
             const user = auth.currentUser;
             if (!user || user.email !== ADMIN_EMAIL) return alert("Admin only!");
+            
             const title = document.getElementById('post-title').value;
             const category = document.getElementById('post-category').value;
             const content = document.getElementById('post-content').value;
             
             try {
-                await addDoc(collection(db, "posts"), { title, category, content, timestamp: serverTimestamp() });
-                alert("Posted Successfully! 🚀");
+                if (editingPostId) {
+                    // UPDATE EXISTING POST
+                    await updateDoc(doc(db, "posts", editingPostId), {
+                        title, category, content, 
+                        // Note: We don't update timestamp so it stays in original order
+                    });
+                    alert("Updated Successfully! ✅");
+                } else {
+                    // CREATE NEW POST
+                    await addDoc(collection(db, "posts"), { 
+                        title, category, content, 
+                        timestamp: serverTimestamp() 
+                    });
+                    alert("Published Successfully! 🚀");
+                }
+                
                 goHome(); 
                 loadBlogs('All');
             } catch(e) { alert("Error: " + e.message); }
@@ -451,7 +530,7 @@
         else if(h<18) g.innerText="It's Giving Afternoon ☕";
         else g.innerText="Go to Sleep Bestie 💤";
 
-        // Initial Load (Sirf ek baar chalega)
+        // Initial Load
         loadBlogs('All');
     </script>
 </body>
