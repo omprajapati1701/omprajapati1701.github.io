@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
     <title>Gen-Z Pulse | Best Aesthetic, Tech & Valentine Gifts India 2026</title>
     
@@ -36,31 +36,40 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background-color: var(--bg-color); color: var(--text-color); font-family: var(--font-main); overflow-x: hidden; line-height: 1.6; font-size: 16px; }
 
-        /* UTILITIES & CONTAINER (Responsive Widths) */
-        .container { 
-            width: 100%; 
-            padding: 0 20px; 
-            margin: 0 auto; 
-        }
-        
-        /* Laptop & Standard Desktop */
+        /* CONTAINER SETUP */
+        .container { width: 100%; padding: 0 20px; margin: 0 auto; box-sizing: border-box; }
         @media (min-width: 1024px) { .container { max-width: 1000px; } }
-        /* Large Screens & TV */
-        @media (min-width: 1440px) { .container { max-width: 1300px; } body { font-size: 18px; } }
-        /* 4K TV */
-        @media (min-width: 2000px) { .container { max-width: 1600px; } body { font-size: 22px; } }
 
         .hidden { display: none !important; }
-        .legal-page { padding: 40px 0; max-width: 800px; margin: 0 auto; }
+        
+        /* LEGAL PAGES */
+        .legal-page { padding: 30px 20px; max-width: 800px; margin: 0 auto; }
         .legal-page h2 { color: var(--accent-green); margin-bottom: 20px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .legal-page h3 { color: var(--accent-purple); margin-top: 20px; margin-bottom: 10px; }
-        .legal-page p { margin-bottom: 15px; color: #ccc; }
+        .legal-page p { margin-bottom: 15px; color: #ccc; font-size: 0.95rem; }
 
-        /* BUTTONS */
-        .btn { background: transparent; border: 1px solid var(--accent-green); color: var(--accent-green); padding: 12px 24px; font-family: var(--font-mono); font-weight: bold; cursor: pointer; text-transform: uppercase; transition: all 0.3s ease; font-size: 0.9rem; border-radius: 4px; }
+        /* BUTTONS (MOBILE FIX APPLIED) */
+        .btn { 
+            background: transparent; 
+            border: 1px solid var(--accent-green); 
+            color: var(--accent-green); 
+            padding: 12px 20px; 
+            font-family: var(--font-mono); 
+            font-weight: bold; 
+            cursor: pointer; 
+            text-transform: uppercase; 
+            transition: all 0.3s ease; 
+            font-size: 0.9rem; 
+            border-radius: 4px; 
+            width: 100%; /* Full width on mobile by default for safety */
+            max-width: 100%;
+            display: block;
+            margin-top: 10px;
+        }
+        @media (min-width: 768px) { .btn { width: auto; display: inline-block; } }
+        
         .btn:hover { background: var(--accent-green); color: var(--bg-color); box-shadow: 0 0 15px var(--accent-green); }
 
-        /* ACTIONS */
+        /* ACTIONS ROW */
         .action-row { display: flex; gap: 10px; margin-top: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
         .icon-btn { background: transparent; border: 1px solid #333; color: #888; padding: 8px 12px; cursor: pointer; font-family: var(--font-mono); font-weight: bold; display: flex; align-items: center; gap: 6px; transition: 0.3s; font-size: 0.8rem; border-radius: 5px; }
         .like-btn:hover { border-color: var(--accent-purple); color: var(--accent-purple); }
@@ -70,25 +79,24 @@
 
         /* SEARCH BAR */
         .search-wrapper { margin-bottom: 40px; text-align: center; padding: 0 10px; }
-        #search-input { width: 100%; max-width: 600px; padding: 15px 25px; background: #111; border: 1px solid #333; color: white; border-radius: 50px; font-size: 1rem; transition: 0.3s; }
+        #search-input { width: 100%; max-width: 600px; padding: 15px 25px; background: #111; border: 1px solid #333; color: white; border-radius: 50px; font-size: 1rem; transition: 0.3s; box-sizing: border-box; }
         #search-input:focus { border-color: var(--accent-green); outline: none; box-shadow: 0 0 15px rgba(204, 255, 0, 0.2); }
 
         /* HEADER */
-        header { padding: 20px 0; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); z-index: 1000; }
+        header { padding: 15px 0; border-bottom: 1px solid rgba(255,255,255,0.1); position: sticky; top: 0; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(10px); z-index: 1000; }
         nav { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.8rem; font-weight: 900; color: var(--text-color); cursor: pointer; }
+        .logo { font-size: 1.5rem; font-weight: 900; color: var(--text-color); cursor: pointer; z-index: 1002; }
         
-        /* HAMBURGER MENU (MOBILE) */
-        .hamburger { display: none; font-size: 1.8rem; cursor: pointer; color: var(--accent-green); }
-        
+        /* HAMBURGER MENU */
+        .hamburger { display: none; font-size: 1.8rem; cursor: pointer; color: var(--accent-green); z-index: 1002; }
         .nav-links { display: flex; gap: 20px; align-items: center; } 
         .nav-links span { font-family: var(--font-mono); font-size: 0.9rem; cursor: pointer; transition: 0.3s; padding: 5px 10px; }
         .nav-links span:hover { color: var(--accent-purple); }
         .active-filter { color: var(--accent-green) !important; text-decoration: underline; }
 
         /* HERO */
-        .hero { min-height: 60vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 0; }
-        .hero h1 { font-size: 4rem; line-height: 1.1; text-transform: uppercase; margin-bottom: 20px; }
+        .hero { min-height: 50vh; display: flex; align-items: center; justify-content: center; text-align: center; padding: 40px 0; }
+        .hero h1 { font-size: 3rem; line-height: 1.1; text-transform: uppercase; margin-bottom: 20px; padding: 0 10px; }
         
         /* GLITCH */
         .glitch { position: relative; }
@@ -104,63 +112,70 @@
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* BLOG GRID */
-        .blog-section { padding: 50px 0; min-height: 60vh; }
-        .section-title { font-size: 2.5rem; margin-bottom: 40px; border-left: 5px solid var(--accent-purple); padding-left: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; }
-        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 25px; transition: 0.3s; position: relative; display: flex; flex-direction: column; justify-content: space-between; border-radius: 8px; }
-        .card:hover { transform: translateY(-5px); border-color: var(--accent-green); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .blog-section { padding: 30px 0; min-height: 60vh; }
+        .section-title { font-size: 2rem; margin-bottom: 30px; border-left: 5px solid var(--accent-purple); padding-left: 15px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { background: var(--glass); border: 1px solid rgba(255,255,255,0.1); padding: 20px; transition: 0.3s; position: relative; display: flex; flex-direction: column; justify-content: space-between; border-radius: 8px; }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent-green); }
         .admin-controls { margin-top: 15px; display: flex; gap: 10px; border-top: 1px solid #333; padding-top: 10px; }
-        .btn-edit { background: #333; color: white; border: none; padding: 5px 10px; cursor: pointer; font-size: 0.8rem; }
-        .btn-delete { background: #500; color: white; border: none; padding: 5px 10px; cursor: pointer; font-size: 0.8rem; }
+        .btn-edit, .btn-delete { border: none; padding: 5px 10px; cursor: pointer; font-size: 0.8rem; color: white; }
+        .btn-edit { background: #333; }
+        .btn-delete { background: #500; }
 
-        /* AUTH BOX */
-        .auth-box { max-width: 400px; margin: 60px auto; background: #111; padding: 40px; border: 1px solid var(--accent-purple); text-align: center; border-radius: 8px; }
-        .admin-panel { max-width: 600px; margin: 0 auto; background: #111; padding: 30px; border: 1px solid #333; border-radius: 8px; }
-        input, select, textarea { width: 100%; padding: 15px; background: #222; border: 1px solid #444; color: white; margin-bottom: 15px; font-family: var(--font-mono); border-radius: 4px; }
+        /* AUTH BOX & ADMIN */
+        .auth-box { max-width: 400px; margin: 40px auto; background: #111; padding: 30px 20px; border: 1px solid var(--accent-purple); text-align: center; border-radius: 8px; width: 100%; box-sizing: border-box; }
+        .admin-panel { max-width: 600px; margin: 0 auto; background: #111; padding: 20px; border: 1px solid #333; border-radius: 8px; box-sizing: border-box; }
+        input, select, textarea { width: 100%; padding: 15px; background: #222; border: 1px solid #444; color: white; margin-bottom: 15px; font-family: var(--font-mono); border-radius: 4px; box-sizing: border-box; }
         input:focus { outline: none; border-color: var(--accent-green); }
         .switch-btn { margin-top: 15px; font-size: 0.8rem; color: #888; cursor: pointer; text-decoration: underline; }
         .google-btn { background: #fff; color: #000; border: none; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        .google-btn:hover { background: #e0e0e0; }
 
-        /* FOOTER */
-        .newsletter { text-align: center; padding: 50px 0; background: linear-gradient(to top, #111, var(--bg-color)); margin-top: 50px; }
-        footer { border-top: 1px solid #222; padding: 40px 0; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: #666; }
-        .footer-links span { margin: 0 10px; cursor: pointer; color: #888; transition: 0.3s; display: inline-block; margin-top: 5px;}
+        /* FOOTER & NEWSLETTER (MOBILE FIX) */
+        .newsletter { text-align: center; padding: 40px 15px; background: linear-gradient(to top, #111, var(--bg-color)); margin-top: 50px; }
+        .newsletter input { width: 100%; max-width: 300px; margin-top: 20px; padding: 10px; border-radius: 5px; border: none; box-sizing: border-box; }
+        footer { border-top: 1px solid #222; padding: 30px 0; text-align: center; font-family: var(--font-mono); font-size: 0.8rem; color: #666; }
+        .footer-links span { margin: 5px 10px; cursor: pointer; color: #888; transition: 0.3s; display: inline-block; }
         .footer-links span:hover { color: var(--accent-green); text-decoration: underline; }
         .seo-text { font-size: 0.9rem; color: #666; max-width: 800px; margin: 0 auto 40px auto; text-align: center; line-height: 1.8; padding: 0 15px; }
 
         /* =========================================
-           📱 MOBILE & TABLET RESPONSIVENESS
+           📱 SUPER MOBILE FIXES
            ========================================= */
         @media (max-width: 768px) { 
-            .hero h1 { font-size: 2.8rem; } 
+            /* Fix Title Size */
+            .hero h1 { font-size: 2.5rem; } 
             
-            /* Hamburger Logic */
+            /* Hamburger Menu */
             .hamburger { display: block; }
             .nav-links { 
                 display: none; 
                 flex-direction: column; 
-                position: absolute; 
-                top: 70px; 
-                right: 20px; 
-                background: #111; 
-                padding: 20px; 
-                border: 1px solid var(--accent-green); 
-                border-radius: 8px;
-                width: 200px;
+                position: fixed; /* Fixed to cover screen */
+                top: 0; left: 0; 
+                width: 100%; height: 100vh;
+                background: rgba(0,0,0,0.95); 
+                padding-top: 80px; 
                 z-index: 1001;
+                align-items: center;
+                gap: 30px;
             }
             .nav-links.active { display: flex; }
+            .nav-links span { font-size: 1.2rem; }
+
+            /* Fix Grid & Cards */
+            .grid { grid-template-columns: 1fr; }
+            .card { margin-bottom: 10px; padding: 15px; }
             
-            /* Adjustments */
-            .grid { grid-template-columns: 1fr; } /* Single column on mobile */
-            .card { margin-bottom: 10px; }
+            /* Fix Content Padding - THIS FIXES THE CUTTING */
+            #full-post-content { padding: 20px 15px !important; width: 100% !important; box-sizing: border-box; overflow-x: hidden; }
+            #full-post-content img, #full-post-content iframe { max-width: 100% !important; height: auto; display: block; margin: 10px 0; }
             
-            /* Content Padding Fix */
-            #full-post-content { padding: 20px !important; }
-            #full-post-content img, #full-post-content button, #full-post-content a { max-width: 100% !important; height: auto; }
+            /* Fix Buttons Overflow */
+            .action-row { flex-direction: column; width: 100%; }
+            .icon-btn, .like-btn { width: 100%; justify-content: center; margin-top: 5px; }
             
-            .marquee { width: 100%; margin-left: 0; transform: rotate(0deg); }
+            /* Marquee Fix */
+            .marquee { width: 100%; margin-left: 0; transform: none; margin: 30px 0; }
         }
     </style>
 </head>
@@ -174,6 +189,7 @@
                 <div class="hamburger" onclick="toggleMenu()">☰</div>
 
                 <div class="nav-links" id="main-nav">
+                    <span style="position: absolute; top: 20px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer; display: block;" onclick="toggleMenu()" class="close-menu">&times;</span>
                     <span onclick="loadBlogs('All'); toggleMenu()" class="active-filter" id="nav-all">Home</span>
                     <span onclick="loadBlogs('Aesthetic'); toggleMenu()" id="nav-aesthetic">Aesthetic</span>
                     <span onclick="loadBlogs('Side Quests'); toggleMenu()" id="nav-side">Side Quests</span>
@@ -200,8 +216,8 @@
                 <h2 id="auth-title" style="color: var(--accent-purple); margin: 20px 0;">Email Login 🔒</h2>
                 <input type="email" id="auth-email" placeholder="Enter Email Address">
                 <input type="password" id="auth-pass" placeholder="Enter Password">
-                <button class="btn" onclick="handleAuth()" id="auth-action-btn" style="width: 100%;">LOGIN</button>
-                <button class="btn" onclick="goHome()" style="width: 100%; margin-top: 10px; border-color: #666; color: #666;">Back to Home</button>
+                <button class="btn" onclick="handleAuth()" id="auth-action-btn">LOGIN</button>
+                <button class="btn" onclick="goHome()" style="margin-top: 10px; border-color: #666; color: #666;">Back to Home</button>
                 <p class="switch-btn" onclick="switchAuthMode()" id="auth-switch-text">New here? Create Account</p>
                 <p style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
                     <span class="switch-btn" style="color: var(--accent-green);" onclick="togglePhoneMode()">Use Phone Number Instead 📱</span>
@@ -212,11 +228,11 @@
                 <div id="phone-step-1">
                     <input type="tel" id="phone-number" placeholder="+91 99999 99999 (Add Code)">
                     <div id="recaptcha-container"></div>
-                    <button class="btn" onclick="sendOTP()" id="get-otp-btn" style="width: 100%;">GET OTP</button>
+                    <button class="btn" onclick="sendOTP()" id="get-otp-btn">GET OTP</button>
                 </div>
                 <div id="phone-step-2" class="hidden">
                     <input type="text" id="otp-code" placeholder="Enter 6-digit OTP">
-                    <button class="btn" onclick="verifyOTP()" style="width: 100%;">VERIFY OTP</button>
+                    <button class="btn" onclick="verifyOTP()">VERIFY OTP</button>
                 </div>
                 <p style="margin-top: 15px;"><span class="switch-btn" onclick="togglePhoneMode()">Back to Email Login</span></p>
             </div>
@@ -229,7 +245,7 @@
                 <span id="dynamic-greeting" style="color:var(--accent-green); font-family:var(--font-mono); margin-bottom:20px; display:block;">Hey Bestie...</span>
                 <h1 class="glitch" data-text="NO CAP. JUST VIBES.">NO CAP. JUST VIBES.</h1>
                 <p style="max-width: 600px; margin: 20px auto; color: #888;">Your daily dose of internet culture.</p>
-                <button class="btn" style="margin-top: 20px;" onclick="document.getElementById('blog-anchor').scrollIntoView({behavior: 'smooth'})">Read the Tea</button>
+                <button class="btn" style="margin-top: 20px; width: auto; padding: 12px 30px;" onclick="document.getElementById('blog-anchor').scrollIntoView({behavior: 'smooth'})">Read the Tea</button>
             </div>
         </section>
 
@@ -275,7 +291,7 @@
     </div>
 
     <div id="read-view" class="container blog-section hidden" style="padding-top: 40px;">
-        <button class="btn" onclick="goHome()" style="margin-bottom: 20px;">&larr; Back to Home</button>
+        <button class="btn" onclick="goHome()" style="margin-bottom: 20px; width: auto;">&larr; Back to Home</button>
         <div id="full-post-content" style="background: #111; padding: 40px; border: 1px solid var(--accent-green); min-height: 50vh; border-radius: 8px;"></div>
     </div>
 
@@ -290,8 +306,8 @@
                 <option value="Tech/AI">Tech/AI</option>
             </select>
             <textarea id="post-content" rows="12" placeholder="Write content (Paste HTML here)..."></textarea>
-            <button class="btn" id="upload-btn" onclick="handlePostSubmit()" style="width: 100%;">PUBLISH</button>
-            <button class="btn" onclick="goHome()" style="width: 100%; margin-top:10px; border-color:#666; color:#666;">Cancel</button>
+            <button class="btn" id="upload-btn" onclick="handlePostSubmit()">PUBLISH</button>
+            <button class="btn" onclick="goHome()" style="margin-top:10px; border-color:#666; color:#666;">Cancel</button>
         </div>
     </div>
 
@@ -301,7 +317,7 @@
             <input type="email" placeholder="Email..." style="width: 300px; margin-top: 20px;">
             <p style="margin-top: 20px; color: #888;">Support the vibe 👇</p>
              <a href="https://www.buymeacoffee.com/genzpulse" target="_blank">
-                <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 40px !important;">
+                <img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" style="height: 50px !important; width: auto !important; margin-top: 15px;">
             </a>
         </div>
     </section>
@@ -343,7 +359,7 @@
         let isLoginMode = true;
         let editingPostId = null;
 
-        // 🟢 LOAD BLOGS FUNCTION (OPTIMIZED)
+        // 🟢 LOAD BLOGS FUNCTION
         window.loadBlogs = async (filterCategory = 'All') => {
             const grid = document.getElementById('blog-grid');
             if(!grid) return;
@@ -351,7 +367,6 @@
             showSection('home');
             
             try {
-                // ADDED LIMIT 20 for Speed
                 const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
                 const querySnapshot = await getDocs(q);
                 grid.innerHTML = ""; 
@@ -361,7 +376,6 @@
                     return;
                 }
 
-                // USE FRAGMENT FOR SPEED
                 const fragment = document.createDocumentFragment();
 
                 querySnapshot.forEach((docSnapshot) => {
@@ -374,8 +388,6 @@
                     
                     const card = document.createElement('article');
                     card.className = 'card';
-                    
-                    // SAFETY FIX for Search Crash
                     const titleSafe = post.title ? post.title.toLowerCase() : "";
                     card.setAttribute('data-title', titleSafe);
 
@@ -393,13 +405,13 @@
                                 <span class="view-count">👁️ ${views}</span>
                             </div>
                         </div>
-                        <button class="btn" style="width:100%; margin-top:10px;" onclick='openPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
+                        <button class="btn" onclick='openPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>Read Tea ☕</button>
                         <div class="action-row">
                              <button class="icon-btn like-btn ${isLikedLocal}" id="like-btn-${pid}" onclick="toggleLike('${pid}')">
                                 ❤️ <span id="like-count-${pid}">${likes}</span>
                              </button>
-                             <a href="${whatsappLink}" target="_blank" style="text-decoration:none;">
-                                <button class="icon-btn share-btn">📲 Share</button>
+                             <a href="${whatsappLink}" target="_blank" style="text-decoration:none; flex:1;">
+                                <button class="icon-btn share-btn" style="width:100%;">📲 Share</button>
                              </a>
                         </div>
                     `;
@@ -416,7 +428,7 @@
                     fragment.appendChild(card);
                 });
 
-                grid.appendChild(fragment); // Single Update
+                grid.appendChild(fragment);
 
             } catch (e) { 
                 console.error(e);
@@ -424,7 +436,6 @@
             }
         };
 
-        // 🟢 SEARCH FUNCTION
         window.filterBlogs = () => {
             const input = document.getElementById('search-input');
             const filter = input.value.toLowerCase();
@@ -440,7 +451,6 @@
             }
         };
 
-        // 🟢 HANDLE LIKES
         window.toggleLike = async (pid) => {
             const likeKey = 'liked_' + pid;
             const isLiked = localStorage.getItem(likeKey);
@@ -462,7 +472,6 @@
             }
         };
 
-        // 🟢 OPEN POST
         window.openPost = async (pid, post) => {
             showSection('read');
             document.getElementById('full-post-content').innerHTML = `<h1>${post.title}</h1><hr><div style="font-size:1.1rem; line-height:1.8;">${post.content.replace(/\n/g, "<br>")}</div>`;
@@ -473,7 +482,6 @@
             } catch(e) { console.log("View update failed", e); }
         };
 
-        // --- AUTH & SYSTEM LOGIC ---
         onAuthStateChanged(auth, (user) => {
             const loginBtn = document.getElementById('nav-login');
             const logoutBtn = document.getElementById('nav-logout');
@@ -494,7 +502,7 @@
             }
         });
 
-        // 🔵 NEW: MENU TOGGLE FUNCTION FOR MOBILE
+        // 🔵 HAMBURGER MENU TOGGLE
         window.toggleMenu = () => {
             const nav = document.getElementById('main-nav');
             if (nav.classList.contains('active')) {
