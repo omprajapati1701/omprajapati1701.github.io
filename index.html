@@ -6,7 +6,7 @@
     
     <title>Gen-Z Pulse | No Cap. Just Vibes.</title>
     
-    <meta name="description" content="Gen-Z Pulse: The ultimate community for aesthetic trends, dating clarity, and mental health. No cap, just feelings.">
+    <meta name="description" content="Gen-Z Pulse: The ultimate community for aesthetic trends, dating clarity, and mental health.">
     <meta name="author" content="Team Gen-Z Pulse"> 
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,15 +29,15 @@
         :root {
             --bg-color: #030303;
             --text-color: #ffffff;
-            --accent-green: #ccff00; /* Neon Lime */
-            --accent-purple: #b300ff; /* Electric Purple */
+            --accent-green: #ccff00;
+            --accent-purple: #b300ff;
             --glass-bg: rgba(20, 20, 20, 0.4);
             --glass-border: rgba(255, 255, 255, 0.08);
             --font-head: 'Syne', sans-serif;
             --font-body: 'Space Grotesk', sans-serif;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; /* Custom Cursor */ }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
         
         body { 
             background-color: var(--bg-color); 
@@ -47,7 +47,7 @@
             line-height: 1.6;
         }
 
-        /* 🟢 DYNAMIC BACKGROUND BLOBS */
+        /* 🟢 BACKGROUND BLOBS */
         .background-blob {
             position: fixed;
             border-radius: 50%;
@@ -102,8 +102,7 @@
         nav { display: flex; justify-content: space-between; align-items: center; }
         .logo { 
             font-family: var(--font-head); font-size: 1.8rem; font-weight: 800; 
-            color: white; text-transform: uppercase; letter-spacing: -1px;
-            cursor: pointer;
+            color: white; text-transform: uppercase; letter-spacing: -1px; cursor: pointer;
         }
         .logo span { color: var(--accent-green); }
 
@@ -138,7 +137,7 @@
             box-shadow: 0 0 20px var(--accent-green);
         }
 
-        /* HERO SECTION */
+        /* HERO */
         .hero { 
             min-height: 60vh; display: flex; align-items: center; justify-content: center; 
             text-align: center; flex-direction: column; 
@@ -150,16 +149,16 @@
         .hero p { color: #ccc; max-width: 600px; margin-bottom: 30px; font-size: 1.1rem; }
         
         /* GLITCH TEXT */
-        .glitch { position: relative; display: inline-block; }
-        .glitch::before, .glitch::after {
+        .glitch-text { position: relative; display: inline-block; }
+        .glitch-text::before, .glitch-text::after {
             content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--bg-color);
         }
-        .glitch::before { left: 2px; text-shadow: -1px 0 #ff00c1; clip: rect(44px, 450px, 56px, 0); animation: glitch 5s infinite alternate-reverse; }
-        .glitch::after { left: -2px; text-shadow: -1px 0 #00fff9; clip: rect(44px, 450px, 56px, 0); animation: glitch 3s infinite alternate-reverse; }
+        .glitch-text::before { left: 2px; text-shadow: -1px 0 #ff00c1; clip: rect(44px, 450px, 56px, 0); animation: glitch 5s infinite alternate-reverse; }
+        .glitch-text::after { left: -2px; text-shadow: -1px 0 #00fff9; clip: rect(44px, 450px, 56px, 0); animation: glitch 3s infinite alternate-reverse; }
         @keyframes glitch { 0% { clip: rect(10px, 9999px, 80px, 0); } 100% { clip: rect(90px, 9999px, 10px, 0); } }
 
-        /* CARDS (The Glass Effect) */
+        /* CARDS */
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-top: 30px; }
         .card {
             background: var(--glass-bg);
@@ -176,16 +175,26 @@
             box-shadow: 0 0 30px rgba(191, 0, 255, 0.2);
         }
         .card h3 { font-family: var(--font-head); font-size: 1.4rem; margin-bottom: 10px; line-height: 1.2; }
+        .category-tag {
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;
+            padding: 5px 10px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05);
+        }
 
-        /* AUTH BOX (Glass Effect) */
+        /* AUTH BOX (CLEANED UP) */
         .auth-box { 
             max-width: 400px; margin: 40px auto; 
-            background: var(--glass-bg); /* Glass */
+            background: var(--glass-bg);
             padding: 40px; 
             border: 1px solid var(--glass-border); 
             text-align: center; border-radius: 16px; width: 100%; box-sizing: border-box; 
             backdrop-filter: blur(10px);
         }
+        .google-btn {
+            background: white; color: black; border: none; font-weight: bold; width: 100%;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+        .google-btn:hover { background: #eee; box-shadow: 0 0 10px white; color: black; }
 
         /* INPUTS */
         input, select, textarea {
@@ -200,18 +209,15 @@
         #full-post-content {
             background: var(--glass-bg); border: 1px solid var(--glass-border);
             padding: 30px 20px !important; border-radius: 10px; line-height: 1.8; font-size: 1.1rem;
-            backdrop-filter: blur(15px);
-            width: 100% !important; overflow-x: hidden;
+            backdrop-filter: blur(15px); width: 100% !important; overflow-x: hidden;
         }
         #full-post-content h1 { color: var(--accent-green); font-family: var(--font-head); margin-bottom: 20px; }
         #full-post-content h3 { color: var(--accent-purple); margin-top: 30px; }
-        
-        /* Force Wrap Fix */
         #full-post-content * { max-width: 100% !important; box-sizing: border-box !important; word-wrap: break-word !important; }
 
         /* MARQUEE */
         .marquee { background: var(--accent-green); color: black; padding: 10px 0; transform: rotate(-1deg); width: 102%; margin-left: -1%; }
-        .marquee div, .marquee-content { font-weight: 800; font-family: var(--font-head); display: inline-block; animation: scroll 15s linear infinite; }
+        .marquee div { font-weight: 800; font-family: var(--font-head); display: inline-block; animation: scroll 15s linear infinite; }
         @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
         /* FOOTER */
@@ -230,12 +236,9 @@
             }
             .nav-links.active { display: flex; }
             .nav-links span { font-size: 1.5rem; }
-            .card { margin-bottom: 15px; }
         }
         
         .admin-panel { background: var(--glass-bg); padding: 20px; border: 1px solid var(--glass-border); border-radius: 8px; backdrop-filter: blur(10px); }
-        .action-row { display: flex; gap: 10px; margin-top: 15px; align-items: center; justify-content: space-between; }
-        .icon-btn { background: transparent; border: 1px solid #333; color: #888; padding: 8px 12px; cursor: pointer; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -247,147 +250,119 @@
     <header>
         <div class="container">
             <nav>
-                <div class="logo glitch" data-text="Gen-Z Pulse" onclick="window.goHome()">Gen-Z <span>Pulse</span></div>
+                <div class="logo glitch-text" data-text="Gen-Z Pulse" onclick="window.goHome()">Gen-Z <span>Pulse</span></div>
                 
                 <div class="hamburger" onclick="window.toggleMenu()">☰</div>
 
                 <div class="nav-links" id="main-nav">
                     <span style="position: absolute; top: 20px; right: 20px; font-size: 2rem; color: #fff; cursor: pointer;" onclick="window.toggleMenu()" class="close-menu">&times;</span>
-                    <span onclick="window.loadBlogs('All'); window.toggleMenu()" class="active-filter" id="nav-all">Home</span>
-                    <span onclick="window.loadBlogs('Aesthetic'); window.toggleMenu()" id="nav-aesthetic">Aesthetic</span>
-                    <span onclick="window.loadBlogs('Side Quests'); window.toggleMenu()" id="nav-side">Side Quests</span>
-                    <span onclick="window.loadBlogs('Mental Health'); window.toggleMenu()" id="nav-mental">Mental Health</span>
+                    <span onclick="window.loadBlogs('All'); window.toggleMenu()" class="active-filter">Home</span>
+                    <span onclick="window.loadBlogs('Aesthetic'); window.toggleMenu()">Aesthetic</span>
+                    <span onclick="window.loadBlogs('Side Quests'); window.toggleMenu()">Side Quests</span>
+                    <span onclick="window.loadBlogs('Mental Health'); window.toggleMenu()">Mental Health</span>
                     
-                    <span onclick="window.showSection('admin'); window.toggleMenu()" id="nav-admin" class="hidden" style="color: var(--accent-green); border: 1px solid var(--accent-green);">Upload</span>
-                    <span onclick="window.logoutUser()" id="nav-logout" class="hidden" style="color: red;">Logout</span>
-                    <span onclick="window.showSection('auth'); window.toggleMenu()" id="nav-login" style="border: 1px solid #fff;">Login</span>
+                    <span onclick="window.showSection('admin'); window.toggleMenu()" id="nav-admin" class="hidden" style="color:var(--accent-green)">Upload</span>
+                    <span onclick="window.logoutUser()" id="nav-logout" class="hidden" style="color:red">Logout</span>
+                    <span onclick="window.showSection('auth'); window.toggleMenu()" id="nav-login">Login</span>
                 </div>
             </nav>
         </div>
     </header>
 
-    <div id="auth-view" class="container hidden">
+    <div id="auth-view" class="container hidden" style="height: 80vh; display: flex; align-items: center; justify-content: center;">
         <div class="auth-box">
-            <h1 style="margin-bottom: 10px; font-family: var(--font-head);">WELCOME TO THE CULT</h1>
-            <p style="color: #888; margin-bottom: 30px;">Login to access Admin features.</p>
-            <div id="social-login">
-                <button class="btn google-btn" onclick="window.googleLogin()" style="width: 100%; border-color: white; color: white; background: transparent;">
-                    Continue with Google
-                </button>
-            </div>
+            <h2 style="font-family: var(--font-head); margin-bottom: 20px;">Welcome to the Cult 👁️</h2>
+            
+            <button class="btn google-btn" onclick="window.googleLogin()">
+                <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.715H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.448 2.816 1.256 3.966l2.708-2.256z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.159 6.656 3.58 9 3.58z"/></svg>
+                Continue with Google
+            </button>
+            
+            <p style="margin: 20px 0; color: #666;">--- OR ---</p>
+
             <div id="email-section">
-                <h2 id="auth-title" style="color: var(--accent-purple); margin: 20px 0;">Email Login 🔒</h2>
-                <input type="email" id="auth-email" placeholder="Enter Email Address">
-                <input type="password" id="auth-pass" placeholder="Enter Password">
+                <h3 id="auth-title" style="color: var(--accent-green); margin-bottom: 15px;">Email Login</h3>
+                <input type="email" id="auth-email" placeholder="Email Address">
+                <input type="password" id="auth-pass" placeholder="Password">
                 <button class="btn" onclick="window.handleAuth()" id="auth-action-btn" style="width: 100%;">LOGIN</button>
-                <button class="btn" onclick="window.goHome()" style="margin-top: 10px; border-color: #666; color: #666; width: 100%;">Back to Home</button>
-                <p class="switch-btn" onclick="window.switchAuthMode()" id="auth-switch-text">New here? Create Account</p>
-                <p style="margin-top: 15px; border-top: 1px solid #333; padding-top: 15px;">
-                    <span class="switch-btn" style="color: var(--accent-green);" onclick="window.togglePhoneMode()">Use Phone Number Instead 📱</span>
-                </p>
-            </div>
-            <div id="phone-section" class="hidden">
-                <h2 style="color: var(--accent-green); margin: 20px 0;">Phone Login 📱</h2>
-                <div id="phone-step-1">
-                    <input type="tel" id="phone-number" placeholder="+91 99999 99999 (Add Code)">
-                    <div id="recaptcha-container"></div>
-                    <button class="btn" onclick="window.sendOTP()" id="get-otp-btn" style="width: 100%;">GET OTP</button>
-                </div>
-                <div id="phone-step-2" class="hidden">
-                    <input type="text" id="otp-code" placeholder="Enter 6-digit OTP">
-                    <button class="btn" onclick="window.verifyOTP()" style="width: 100%;">VERIFY OTP</button>
-                </div>
-                <p style="margin-top: 15px;"><span class="switch-btn" onclick="window.togglePhoneMode()">Back to Email Login</span></p>
+                <p onclick="window.switchAuthMode()" id="auth-switch-text" style="margin-top: 15px; font-size: 0.8rem; text-decoration: underline; cursor: pointer;">New here? Create Account</p>
+                <button class="btn" onclick="window.goHome()" style="margin-top: 20px; border-color: #555; color: #555; width: 100%;">Cancel</button>
             </div>
         </div>
     </div>
 
     <div id="home-view">
         <section class="hero">
-            <div class="container">
-                <span id="dynamic-greeting" style="color:var(--accent-green); font-family:var(--font-body); margin-bottom:20px; display:block;">Hey Bestie...</span>
-                <h1 class="glitch" data-text="NO CAP. JUST VIBES.">NO CAP. JUST VIBES.</h1>
-                <p style="max-width: 600px; margin: 20px auto; color: #888;">Your daily dose of internet culture.</p>
-                <button class="btn" style="margin-top: 20px; width: auto; padding: 12px 30px;" onclick="document.getElementById('blog-anchor').scrollIntoView({behavior: 'smooth'})">Read the Tea</button>
-            </div>
+            <span id="dynamic-greeting" style="color:var(--accent-green); font-family:var(--font-body); margin-bottom:10px;">Loading vibe...</span>
+            <h1 class="glitch-text" data-text="NO CAP. JUST FEELINGS.">NO CAP. JUST FEELINGS.</h1>
+            <p>Your safe space for situationships, aesthetic tech, and existential crisis.</p>
+            <button class="btn" onclick="document.getElementById('blog-anchor').scrollIntoView({behavior: 'smooth'})">EXPLORE</button>
         </section>
 
         <div class="marquee">
-            <div class="marquee-content">✨ NEW DROP: VALENTINE'S GIFT GUIDE ✨ 💀 RIP TWITTER 💀 👽 AI TOOK MY JOB BUT IT'S FINE 👽 ✨ NEW DROP: VALENTINE'S GIFT GUIDE ✨</div>
+            <div>🥀 SITUATIONSHIPS ARE A TRAP 🥀 BUY THAT LAMP 🥀 TOUCH GRASS 🥀 SITUATIONSHIPS ARE A TRAP</div>
         </div>
 
-        <section class="container blog-section" id="blog-anchor">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <input type="text" id="search-input" placeholder="🔍 Search vibes..." onkeyup="window.filterBlogs()">
+        <section class="container" id="blog-anchor" style="padding: 50px 0;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <input type="text" id="search-input" placeholder="Search for clarity..." onkeyup="window.filterBlogs()">
             </div>
-            <div class="grid" id="blog-grid"><p style="color: #666;">Brewing Tea... ☕</p></div>
+            <div class="grid" id="blog-grid"><p>Brewing Tea... ☕</p></div>
         </section>
     </div>
 
-    <div id="about-view" class="container hidden legal-page">
-        <h2>About Gen-Z Pulse</h2>
-        <p>Welcome to <strong>Gen-Z Pulse</strong>...</p>
-        <button class="btn" onclick="window.goHome()" style="margin-top: 20px;">&larr; Back</button>
-    </div>
-    <div id="privacy-view" class="container hidden legal-page">
-        <h2>Privacy Policy</h2>
-        <p>Last updated: February 01, 2026</p>
-        <button class="btn" onclick="window.goHome()" style="margin-top: 20px;">&larr; Back</button>
-    </div>
-    <div id="terms-view" class="container hidden legal-page">
-        <h2>Terms & Conditions</h2>
-        <button class="btn" onclick="window.goHome()" style="margin-top: 20px;">&larr; Back</button>
-    </div>
-
-    <div id="read-view" class="container blog-section hidden" style="padding-top: 40px;">
-        <button class="btn" onclick="window.goHome()" style="margin-bottom: 20px; width: auto;">&larr; BACK</button>
+    <div id="read-view" class="container hidden" style="padding-top: 40px; min-height: 80vh;">
+        <button class="btn" onclick="window.goHome()" style="margin-bottom: 20px;">&larr; BACK</button>
         <div id="full-post-content"></div>
     </div>
 
-    <div id="admin-view" class="container blog-section hidden" style="padding-top: 40px;">
+    <div id="admin-view" class="container hidden" style="padding-top: 50px;">
         <div class="admin-panel">
-            <h2 id="form-title" style="color: var(--accent-green); margin-bottom: 20px; font-family: var(--font-head);">Spill the Tea ☕</h2>
-            <input type="text" id="post-title" placeholder="Blog Title">
+            <h2 id="form-title" style="margin-bottom: 20px; font-family: var(--font-head);">Spill the Tea ☕</h2>
+            <input type="text" id="post-title" placeholder="Title (Make it catchy)">
             <select id="post-category">
                 <option value="Aesthetic">Aesthetic</option>
                 <option value="Mental Health">Mental Health</option>
                 <option value="Side Quests">Side Quests</option>
-                <option value="Tech/AI">Tech/AI</option>
             </select>
-            <textarea id="post-content" rows="12" placeholder="Write content (Paste HTML here)..."></textarea>
+            <textarea id="post-content" rows="10" placeholder="Paste HTML here..."></textarea>
             <button class="btn" id="upload-btn" onclick="window.handlePostSubmit()">PUBLISH</button>
-            <button class="btn" onclick="window.goHome()" style="margin-top:10px; border-color:#666; color:#666;">Cancel</button>
+            <button class="btn" onclick="window.goHome()" style="border-color: #555; color: #555; margin-left: 10px;">CANCEL</button>
         </div>
     </div>
 
+    <div id="about-view" class="container hidden" style="padding-top:40px;"><h2 style="font-family:var(--font-head); color:var(--accent-green)">About</h2><p>We are Gen-Z Pulse.</p><button class="btn" onclick="window.goHome()" style="margin-top:20px">&larr; Back</button></div>
+    <div id="privacy-view" class="container hidden" style="padding-top:40px;"><h2 style="font-family:var(--font-head); color:var(--accent-green)">Privacy</h2><p>Privacy matters.</p><button class="btn" onclick="window.goHome()" style="margin-top:20px">&larr; Back</button></div>
+    <div id="terms-view" class="container hidden" style="padding-top:40px;"><h2 style="font-family:var(--font-head); color:var(--accent-green)">Terms</h2><p>Be nice.</p><button class="btn" onclick="window.goHome()" style="margin-top:20px">&larr; Back</button></div>
+
     <footer>
         <div class="container">
-            <p style="margin-bottom: 15px;">&copy; 2026 Gen-Z Pulse. No Copyrights, Just Vibes.</p>
+            <p style="margin-bottom: 15px;">&copy; 2026 Gen-Z Pulse.</p>
             <div class="footer-links">
                 <span onclick="window.goHome()">Home</span>
-                <span onclick="window.showSection('about')">About Us</span>
-                <span onclick="window.showSection('privacy')">Privacy Policy</span>
+                <span onclick="window.showSection('about')">About</span>
+                <span onclick="window.showSection('privacy')">Privacy</span>
                 <span onclick="window.showSection('terms')">Terms</span>
             </div>
         </div>
     </footer>
 
     <script type="module">
-        // 🟢 CUSTOM CURSOR LOGIC (Visual Only)
+        // 🟢 CURSOR LOGIC
         const cursor = document.getElementById('cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
         });
-        document.querySelectorAll('a, button, .card, .logo').forEach(el => {
+        document.querySelectorAll('a, button, .card').forEach(el => {
             el.addEventListener('mouseenter', () => { cursor.style.transform = 'translate(-50%, -50%) scale(2)'; cursor.style.background = 'white'; });
             el.addEventListener('mouseleave', () => { cursor.style.transform = 'translate(-50%, -50%) scale(1)'; cursor.style.background = 'transparent'; });
         });
 
-        // 🟢 FIREBASE LOGIC (UNCHANGED)
+        // 🟢 FIREBASE IMPORTS (Cleaned up)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, getDoc, orderBy, query, limit, serverTimestamp, doc, updateDoc, deleteDoc, increment } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup, RecaptchaVerifier, signInWithPhoneNumber } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDHsq28W0PgjmDWJB9f1SOVwdRUvWT43oE",
@@ -407,9 +382,9 @@
 
         let isLoginMode = true;
         let editingPostId = null;
-        window.cachedPosts = {}; 
+        window.cachedPosts = {};
 
-        // 🟢 ROUTING LOGIC
+        // 🟢 ROUTING
         window.handleRouting = async () => {
             const hash = window.location.hash;
             if (hash.startsWith("#view=")) {
@@ -417,53 +392,35 @@
                 window.showSection('read');
                 let post = window.cachedPosts[pid];
                 if (!post) {
-                    document.getElementById('full-post-content').innerHTML = "<p style='text-align:center; margin-top:50px;'>Brewing Tea... ☕ (Loading)</p>";
                     try {
                         const docRef = doc(db, "posts", pid);
                         const docSnap = await getDoc(docRef);
-                        if (docSnap.exists()) {
-                            post = docSnap.data();
-                            window.cachedPosts[pid] = post;
-                        } else {
-                            document.getElementById('full-post-content').innerHTML = "<p>404: Vibe Not Found (Deleted).</p>";
-                            return;
-                        }
-                    } catch (e) {
-                        document.getElementById('full-post-content').innerHTML = "<p>Error loading vibe. Check internet.</p>";
-                        return;
-                    }
+                        if (docSnap.exists()) { post = docSnap.data(); window.cachedPosts[pid] = post; }
+                    } catch (e) {}
                 }
-                // Render with Glass Style
-                document.getElementById('full-post-content').innerHTML = `
-                    <h1 style="color:var(--accent-green); font-family: var(--font-head);">${post.title}</h1>
-                    <div style="font-size:0.8rem; color:#aaa; margin-bottom:20px; font-family: var(--font-body);">Category: ${post.category}</div>
-                    <hr style="border-color:rgba(255,255,255,0.1); margin-bottom:20px;">
-                    <div style="font-size:1.1rem; line-height:1.8;">${post.content.replace(/\n/g, "<br>")}</div>
-                `;
-                window.scrollTo(0,0);
-                try { await updateDoc(doc(db, "posts", pid), { views: increment(1) }); } catch(e) {}
-            } 
-            else {
+                if(post) {
+                    document.getElementById('full-post-content').innerHTML = `
+                        <h1>${post.title}</h1>
+                        <span style="color:var(--accent-purple); border:1px solid var(--accent-purple); padding:2px 8px; border-radius:4px; font-size:0.8rem;">${post.category}</span>
+                        <hr style="border-color:#333; margin:20px 0;">
+                        <div>${post.content.replace(/\n/g, "<br>")}</div>`;
+                    try { await updateDoc(doc(db, "posts", pid), { views: increment(1) }); } catch(e) {}
+                }
+            } else {
                 window.showSection('home');
                 if(document.getElementById('blog-grid').innerHTML.includes('Brewing')) window.loadBlogs('All');
             }
         };
-
         window.addEventListener("hashchange", window.handleRouting);
 
-        // 🟢 LOAD BLOGS (Visual Update)
+        // 🟢 BLOGS
         window.loadBlogs = async (filterCategory = 'All') => {
             const grid = document.getElementById('blog-grid');
-            if(!grid) return;
             if(filterCategory === 'All' && grid.children.length > 1) return;
-
-            grid.innerHTML = "<p>Loading Vibes...</p>";
             try {
                 const q = query(collection(db, "posts"), orderBy("timestamp", "desc"), limit(20));
                 const querySnapshot = await getDocs(q);
                 grid.innerHTML = ""; 
-                if(querySnapshot.empty) { grid.innerHTML = "<p>No vibes yet.</p>"; return; }
-
                 const fragment = document.createDocumentFragment();
                 querySnapshot.forEach((docSnapshot) => {
                     const post = docSnapshot.data();
@@ -473,229 +430,113 @@
                     
                     const card = document.createElement('article');
                     card.className = 'card';
-                    card.setAttribute('data-title', post.title ? post.title.toLowerCase() : "");
-
-                    const isLikedLocal = localStorage.getItem('liked_' + pid) ? 'liked-active' : '';
-                    const shareLink = `https://omprajapati1701.github.io/#view=${pid}`;
-                    const shareText = `Check out this vibe: ${post.title} ${shareLink}`;
-                    const whatsappLink = `https://wa.me/?text=${encodeURIComponent(shareText)}`;
-
-                    let htmlContent = `
+                    card.setAttribute('data-title', post.title.toLowerCase());
+                    
+                    card.innerHTML = `
                         <div>
-                            <div style="display:flex; justify-content:space-between; align-items:start;">
-                                <h3 style="margin-bottom:10px;">${post.title || "Untitled Vibe"}</h3>
-                            </div>
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                                <span style="background:rgba(255,255,255,0.1); padding:4px 8px; font-size:0.7rem; border-radius:4px;">${post.category}</span>
-                                <span class="view-count">👁️ ${post.views || 0}</span>
-                            </div>
+                            <h3>${post.title}</h3>
+                            <span class="category-tag">${post.category}</span>
                         </div>
-                        <button class="btn" style="width:100%; margin-top:10px;" onclick='window.openPost("${pid}")'>Read Tea ☕</button>
-                        <div class="action-row">
-                             <button class="icon-btn like-btn ${isLikedLocal}" id="like-btn-${pid}" onclick="window.toggleLike('${pid}')">
-                                ❤️ <span id="like-count-${pid}">${post.likes || 0}</span>
-                             </button>
-                             <a href="${whatsappLink}" target="_blank" style="text-decoration:none; flex:1;">
-                                <button class="icon-btn share-btn" style="width:100%;">📲 Share</button>
-                             </a>
+                        <div style="margin-top:15px; display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size:0.8rem; color:#888;">👁️ ${post.views || 0}</span>
+                            <button class="btn" style="padding:5px 15px; font-size:0.8rem;" onclick='window.location.hash="view=${pid}"'>READ</button>
                         </div>
                     `;
                     if(auth.currentUser && auth.currentUser.email === ADMIN_EMAIL) {
-                        htmlContent += `<div class="admin-controls">
-                                <button class="btn-edit" onclick='window.editPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})'>EDIT</button>
-                                <button class="btn-delete" onclick='window.deletePost("${pid}")'>DELETE</button>
-                            </div>`;
+                        card.innerHTML += `<div style="margin-top:10px; border-top:1px solid #333; padding-top:5px;">
+                            <button onclick='window.editPost("${pid}", ${JSON.stringify(post).replace(/'/g, "&#39;")})' style="color:orange; background:none; border:none; cursor:pointer;">EDIT</button>
+                            <button onclick='window.deletePost("${pid}")' style="color:red; background:none; border:none; cursor:pointer; margin-left:10px;">DEL</button>
+                        </div>`;
                     }
-                    card.innerHTML = htmlContent;
                     fragment.appendChild(card);
                 });
                 grid.appendChild(fragment);
-            } catch (e) { grid.innerHTML = "<p>Error loading content.</p>"; }
+            } catch (e) { grid.innerHTML = "<p>Error loading vibes.</p>"; }
         };
 
         window.filterBlogs = () => {
-            const input = document.getElementById('search-input');
-            const filter = input.value.toLowerCase();
-            const grid = document.getElementById('blog-grid');
-            const cards = grid.getElementsByClassName('card');
-            for (let i = 0; i < cards.length; i++) {
-                const title = cards[i].getAttribute('data-title');
-                if (title && title.indexOf(filter) > -1) cards[i].classList.remove('hidden');
-                else cards[i].classList.add('hidden');
+            const filter = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.getElementsByClassName('card');
+            for(let card of cards) {
+                card.style.display = card.getAttribute('data-title').includes(filter) ? 'flex' : 'none';
             }
         };
 
-        window.toggleLike = async (pid) => {
-            const likeKey = 'liked_' + pid;
-            const isLiked = localStorage.getItem(likeKey);
-            const countSpan = document.getElementById(`like-count-${pid}`);
-            const btn = document.getElementById(`like-btn-${pid}`);
-            let currentCount = parseInt(countSpan.innerText);
-            const postRef = doc(db, "posts", pid);
-            if (isLiked) {
-                localStorage.removeItem(likeKey);
-                btn.classList.remove('liked-active');
-                countSpan.innerText = currentCount - 1;
-                await updateDoc(postRef, { likes: increment(-1) });
-            } else {
-                localStorage.setItem(likeKey, "true");
-                btn.classList.add('liked-active');
-                countSpan.innerText = currentCount + 1;
-                await updateDoc(postRef, { likes: increment(1) });
-            }
+        // 🟢 AUTH (Google Fixed)
+        window.googleLogin = async () => { 
+            try { 
+                await signInWithPopup(auth, googleProvider); 
+                window.goHome(); 
+            } catch(e) { 
+                alert("Login Failed: " + e.message); 
+            } 
         };
 
-        window.openPost = (pid) => window.location.hash = "view=" + pid;
-
-        onAuthStateChanged(auth, (user) => {
-            const loginBtn = document.getElementById('nav-login');
-            const logoutBtn = document.getElementById('nav-logout');
-            const adminBtn = document.getElementById('nav-admin');
-            if (user) {
-                loginBtn.classList.add('hidden');
-                logoutBtn.classList.remove('hidden');
-                document.getElementById('auth-view').classList.add('hidden'); 
-                if(user.email === ADMIN_EMAIL) adminBtn.classList.remove('hidden');
-            } else {
-                loginBtn.classList.remove('hidden');
-                logoutBtn.classList.add('hidden');
-                adminBtn.classList.add('hidden');
-            }
-        });
-
-        window.toggleMenu = () => document.getElementById('main-nav').classList.toggle('active');
-
-        window.editPost = (id, post) => {
-            editingPostId = id; 
-            document.getElementById('post-title').value = post.title;
-            document.getElementById('post-category').value = post.category;
-            document.getElementById('post-content').value = post.content;
-            document.getElementById('form-title').innerText = "Update Vibe ✏️";
-            document.getElementById('upload-btn').innerText = "UPDATE";
-            window.showSection('admin');
-        };
-
-        window.deletePost = async (id) => {
-            if(confirm("Are you sure you want to delete this vibe? 🗑️")) {
-                try {
-                    await deleteDoc(doc(db, "posts", id));
-                    alert("Deleted Successfully!");
-                    window.loadBlogs('All');
-                } catch(e) { alert("Error: " + e.message); }
-            }
-        };
-
-        window.setupRecaptcha = () => {
-            if(!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', { 'size': 'invisible', 'callback': (response) => {} });
-            }
-        };
-
-        window.togglePhoneMode = () => {
-            const emailSec = document.getElementById('email-section');
-            const phoneSec = document.getElementById('phone-section');
-            if(phoneSec.classList.contains('hidden')) {
-                emailSec.classList.add('hidden'); phoneSec.classList.remove('hidden');
-            } else {
-                phoneSec.classList.add('hidden'); emailSec.classList.remove('hidden');
-            }
-        };
-
-        window.sendOTP = async () => {
-            const phoneNumber = document.getElementById('phone-number').value;
-            if(!phoneNumber) return alert("Enter Phone Number with code (+91..)");
-            document.getElementById('get-otp-btn').innerText = "Sending...";
-            window.setupRecaptcha();
-            const appVerifier = window.recaptchaVerifier;
-            signInWithPhoneNumber(auth, phoneNumber, appVerifier)
-                .then((confirmationResult) => {
-                    window.confirmationResult = confirmationResult;
-                    alert("OTP Sent to " + phoneNumber);
-                    document.getElementById('phone-step-1').classList.add('hidden');
-                    document.getElementById('phone-step-2').classList.remove('hidden');
-                }).catch((error) => {
-                    document.getElementById('get-otp-btn').innerText = "GET OTP";
-                    alert("SMS Error: " + error.message);
-                });
-        };
-
-        window.verifyOTP = async () => {
-            const code = document.getElementById('otp-code').value;
-            if(!code) return alert("Enter OTP");
-            window.confirmationResult.confirm(code).then((result) => {
-                alert("Phone Verified! Welcome.");
+        window.handleAuth = async () => {
+            const email = document.getElementById('auth-email').value;
+            const pass = document.getElementById('auth-pass').value;
+            if(!email || !pass) return alert("Fill all fields");
+            try {
+                if(isLoginMode) await signInWithEmailAndPassword(auth, email, pass);
+                else { await createUserWithEmailAndPassword(auth, email, pass); alert("Created! Login now."); }
                 window.goHome();
-            }).catch((error) => { alert("Invalid OTP. Try again."); });
+            } catch(e) { alert(e.message); }
         };
 
         window.switchAuthMode = () => {
             isLoginMode = !isLoginMode;
-            if (isLoginMode) {
-                document.getElementById('auth-title').innerText = "Email Login 🔒";
-                document.getElementById('auth-action-btn').innerText = "LOGIN";
-                document.getElementById('auth-switch-text').innerText = "New here? Create Account";
-            } else {
-                document.getElementById('auth-title').innerText = "Create Account 📝";
-                document.getElementById('auth-action-btn').innerText = "CREATE ACCOUNT";
-                document.getElementById('auth-switch-text').innerText = "Already have an account? Login";
-            }
+            document.getElementById('auth-title').innerText = isLoginMode ? "Email Login" : "Create Account";
+            document.getElementById('auth-action-btn').innerText = isLoginMode ? "LOGIN" : "CREATE";
+            document.getElementById('auth-switch-text').innerText = isLoginMode ? "New here? Create Account" : "Login";
         };
 
-        window.googleLogin = async () => { try { await signInWithPopup(auth, googleProvider); window.goHome(); } catch (error) { alert("Error: " + error.message); } };
-        window.handleAuth = async () => {
-            const email = document.getElementById('auth-email').value;
-            const pass = document.getElementById('auth-pass').value;
-            if (!email || !pass) return alert("Enter details.");
-            try {
-                if (isLoginMode) await signInWithEmailAndPassword(auth, email, pass);
-                else { await createUserWithEmailAndPassword(auth, email, pass); alert("Account Created!"); }
-                window.goHome();
-            } catch (error) { alert("Error: " + error.message); }
-        };
-        window.logoutUser = () => { signOut(auth); alert("Logged out."); window.location.reload(); };
-        
-        window.showSection = (id) => {
-            if(id !== 'admin') {
-                editingPostId = null;
-                document.getElementById('form-title').innerText = "Create New Vibe ✨";
-                document.getElementById('upload-btn').innerText = "PUBLISH";
-                document.getElementById('post-title').value = "";
-                document.getElementById('post-content').value = "";
+        onAuthStateChanged(auth, (user) => {
+            if(user) {
+                document.getElementById('nav-login').classList.add('hidden');
+                document.getElementById('nav-logout').classList.remove('hidden');
+                if(user.email === ADMIN_EMAIL) {
+                    document.getElementById('nav-admin').classList.remove('hidden');
+                    window.loadBlogs('All'); 
+                }
+            } else {
+                document.getElementById('nav-login').classList.remove('hidden');
+                document.getElementById('nav-logout').classList.add('hidden');
+                document.getElementById('nav-admin').classList.add('hidden');
             }
+        });
+
+        window.logoutUser = () => { signOut(auth); location.reload(); };
+
+        // 🟢 UTILS
+        window.toggleMenu = () => document.getElementById('main-nav').classList.toggle('active');
+        window.showSection = (id) => {
             ['home', 'read', 'auth', 'admin', 'about', 'privacy', 'terms'].forEach(sid => {
-                const el = document.getElementById(sid + '-view');
+                const el = document.getElementById(sid+'-view');
                 if(el) el.classList.add('hidden');
             });
-            const activeEl = document.getElementById(id + '-view');
-            if(activeEl) activeEl.classList.remove('hidden');
+            document.getElementById(id+'-view').classList.remove('hidden');
         };
-        
         window.goHome = () => window.location.hash = "";
 
+        // 🟢 ADMIN
         window.handlePostSubmit = async () => {
-            const user = auth.currentUser;
-            if (!user || user.email !== ADMIN_EMAIL) return alert("Admin only!");
-            const title = document.getElementById('post-title').value;
-            const category = document.getElementById('post-category').value;
-            const content = document.getElementById('post-content').value;
-            try {
-                if (editingPostId) {
-                    await updateDoc(doc(db, "posts", editingPostId), { title, category, content });
-                    alert("Updated Successfully! ✅");
-                } else {
-                    await addDoc(collection(db, "posts"), { title, category, content, timestamp: serverTimestamp(), likes: 0, views: 0 });
-                    alert("Published Successfully! 🚀");
-                }
-                window.goHome(); 
-            } catch(e) { alert("Error: " + e.message); }
+             const title = document.getElementById('post-title').value;
+             const content = document.getElementById('post-content').value;
+             const category = document.getElementById('post-category').value;
+             if(!title || !content) return alert("Empty fields!");
+             try {
+                 if(editingPostId) await updateDoc(doc(db, "posts", editingPostId), { title, content, category });
+                 else await addDoc(collection(db, "posts"), { title, content, category, timestamp: serverTimestamp(), views: 0 });
+                 window.goHome(); window.location.reload();
+             } catch(e) { alert(e.message); }
         };
-        
-        const h = new Date().getHours();
-        const g = document.getElementById('dynamic-greeting');
-        if(h<12) g.innerText="Rise and Grind ☀️";
-        else if(h<18) g.innerText="It's Giving Afternoon ☕";
-        else g.innerText="Go to Sleep Bestie 💤";
+        window.editPost = (id, post) => { editingPostId = id; document.getElementById('post-title').value = post.title; document.getElementById('post-content').value = post.content; window.showSection('admin'); };
+        window.deletePost = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "posts", id)); window.location.reload(); }};
 
+        // INIT
+        const h = new Date().getHours();
+        document.getElementById('dynamic-greeting').innerText = h < 12 ? "Rise and Grind ☀️" : (h < 18 ? "Afternoon Slump ☁️" : "3AM Thoughts Mode 🌙");
+        
         if(!window.location.hash) window.loadBlogs('All'); else window.handleRouting();
 
     </script>
